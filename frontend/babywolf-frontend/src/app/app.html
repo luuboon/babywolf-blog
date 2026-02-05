@@ -1,1 +1,16 @@
-<router-outlet></router-outlet>
+<app-header></app-header>
+
+<div class="layout">
+  <aside class="sidebar" aria-label="Barra lateral">
+    <div class="sidebar-spacer"></div>
+
+    <section class="sidebar-card" aria-label="Enlaces externos">
+      <div class="sidebar-title">Links</div>
+      <app-external-links></app-external-links>
+    </section>
+  </aside>
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

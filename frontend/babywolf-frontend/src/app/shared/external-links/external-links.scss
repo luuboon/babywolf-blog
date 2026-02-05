@@ -1,0 +1,22 @@
+.ext-nav {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.ext-link {
+  text-decoration: none;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  border: 3px solid #1b1b1b;
+  padding: 6px 10px;
+  box-shadow: 4px 4px #1b1b1b;
+  background: #e6e0d6;
+  color: #1b1b1b;
+  border-radius: 6px;
+}
+
+.ext-link:active {
+  translate: 2px 2px;
+  box-shadow: 2px 2px #1b1b1b;
+}

@@ -1,0 +1,22 @@
+.topbar {
+  background: #e6e0d6;
+  color: #1b1b1b;
+  border-bottom: 4px solid #1b1b1b;
+}
+
+.brand {
+  font-weight: 900;
+  letter-spacing: 0.10em;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.divider {
+  width: 2px;
+  height: 26px;
+  background: #1b1b1b;
+  margin: 0 12px;
+  opacity: 0.35;
+}

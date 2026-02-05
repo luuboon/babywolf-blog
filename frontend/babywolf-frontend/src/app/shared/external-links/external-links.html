@@ -1,0 +1,11 @@
+<nav class="ext-nav" aria-label="Enlaces externos">
+  <a
+    *ngFor="let link of links"
+    class="ext-link"
+    [href]="link.url"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    {{ link.label }}
+  </a>
+</nav>

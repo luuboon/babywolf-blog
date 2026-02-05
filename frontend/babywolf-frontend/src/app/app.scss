@@ -1,0 +1,35 @@
+.layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: calc(100vh - 64px); // 64px toolbar height
+}
+
+.sidebar {
+  background: #f6f2ec;
+  border-right: 4px solid #1b1b1b;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-spacer {
+  flex: 1; // empuja el card hacia abajo
+}
+
+.sidebar-card {
+  border: 4px solid #1b1b1b;
+  box-shadow: 6px 6px #1b1b1b;
+  background: #e6e0d6;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.sidebar-title {
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+
+.content {
+  padding: 24px;
+}
