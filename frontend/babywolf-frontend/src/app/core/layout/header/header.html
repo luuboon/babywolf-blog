@@ -1,6 +1,10 @@
 <mat-toolbar class="topbar">
   <div class="brand">BABYWOLF BLOG</div>
 
+  <div class="search-container">
+    <input type="text" placeholder="Search..." (input)="onSearch($event)" />
+  </div>
+
   <span class="spacer"></span>
 
   <nav class="nav" aria-label="Navegación principal">

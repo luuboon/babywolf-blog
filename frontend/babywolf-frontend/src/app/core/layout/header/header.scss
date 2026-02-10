@@ -11,16 +11,55 @@
   color: #1b1b1b;
   border-bottom: 4px solid #1b1b1b;
   height: 80px; // Aumentar altura para que los botones respiren
+  position: relative; // Needed for absolute positioning of search
+  justify-content: space-between; // Ensure brand and nav are pushed to edges
 }
 
 .brand {
   font-weight: 900;
   letter-spacing: 0.10em;
   font-size: 1.2rem;
+  z-index: 10; // Ensure brand stays above if overlapping
 }
 
 .spacer {
   flex: 1;
+}
+
+.search-container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+
+
+  input {
+    width: 100%;
+    padding: 8px 16px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #1b1b1b;
+    background: #f6f2ec;
+    border: 3px solid #1b1b1b;
+    border-radius: 6px;
+    outline: none;
+    box-shadow: inset 2px 2px #1b1b1b;
+    transition: all 0.2s ease;
+
+    &::placeholder {
+      color: rgba(#1b1b1b, 0.5);
+      font-weight: 500;
+    }
+
+    &:focus {
+      background: #fff;
+      box-shadow: inset 4px 4px #1b1b1b;
+    }
+  }
 }
 
 .nav {
