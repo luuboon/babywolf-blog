@@ -1,3 +1,11 @@
+:host {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: block; // Required for custom element to respect sizing
+  width: 100%;
+}
+
 .topbar {
   background: #e6e0d6;
   color: #1b1b1b;

@@ -1,7 +1,7 @@
 .layout {
   display: grid;
   grid-template-columns: 260px 1fr;
-  min-height: calc(100vh - 64px); // 64px toolbar height
+  min-height: calc(100vh - 80px); // 80px toolbar height
 }
 
 .sidebar {
