@@ -1,0 +1,53 @@
+.topbar {
+  background: #e6e0d6;
+  color: #1b1b1b;
+  border-bottom: 4px solid #1b1b1b;
+  height: 80px; // Aumentar altura para que los botones respiren
+}
+
+.brand {
+  font-weight: 900;
+  letter-spacing: 0.10em;
+  font-size: 1.2rem;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.nav {
+  display: flex;
+  gap: 16px;
+  margin-right: 16px;
+}
+
+// Estilos Retro Globales aplicados a los links del header
+a[mat-button] {
+  border: 3px solid #1b1b1b !important; // !important para sobreescribir mat-button si es necesario
+  box-shadow: 4px 4px #1b1b1b;
+  background: #e6e0d6;
+  color: #1b1b1b !important;
+  border-radius: 6px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 0 20px !important; // Ajuste de padding
+  height: 40px !important;
+  line-height: 36px !important; // Centrado vertical manual por el borde
+  transition: all 0.1s ease;
+
+  // Reset de estilos de Material que puedan interferir
+  &.mat-mdc-button-base {
+    --mdc-text-button-label-text-color: #1b1b1b;
+  }
+
+  &:hover {
+    background: #fff;
+    transform: translate(-1px, -1px);
+    box-shadow: 5px 5px #1b1b1b;
+  }
+
+  &:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px #1b1b1b;
+  }
+}
