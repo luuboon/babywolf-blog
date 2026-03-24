@@ -1,19 +1,11 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
-    selector: 'app-home',
-    standalone: true,
-    template: `
-    <div class="home-container">
-      <h1>BabyWolf Blog</h1>
-      <p>Your space to share your thoughts</p>
-    </div>
-  `,
-    styles: [`
-    .home-container {
-      padding: 2rem;
-      text-align: center;
-    }
-  `]
+  selector: 'app-home',
+  standalone: true,
+  imports: [RouterModule],
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent { }
