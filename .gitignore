@@ -1,1 +1,15 @@
 node_modules
+dist
+.env
+.DS_Store
+.claude
+.vscode
+.idea
+*.exe
+*.test
+bin
+obj
+vendor/
+frontend/babywolf-frontend/dist/
+frontend/babywolf-frontend/node_modules/
+backend/bin/
