@@ -1,15 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
+import { SupabaseService } from '../../../core/services/supabase.service';
 
 interface Comment {
   id: string;
   content: string;
-  author: { email: string };
-  post: { title: string };
   created_at: string;
+  users?: { email: string; username: string } | null;
+  posts?: { title: string } | null;
 }
 
 @Component({
@@ -24,38 +23,41 @@ export class CommentManagementComponent implements OnInit {
   loading = true;
   errorMsg = '';
 
-  constructor(private http: HttpClient) {}
+  private sb = inject(SupabaseService);
 
   ngOnInit() {
     this.loadComments();
   }
 
-  loadComments() {
+  async loadComments() {
     this.loading = true;
-    this.http.get<Comment[]>(`${environment.apiUrl}/admin/comments`).subscribe({
-      next: (data) => {
-        this.comments = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.errorMsg = 'Error al cargar los comentarios.';
-        this.loading = false;
-        console.error(err);
-      }
-    });
+    const { data, error } = await this.sb.client
+      .from('comments')
+      .select('*, users(email, username), posts(title)')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      this.errorMsg = 'Error al cargar los comentarios: ' + error.message;
+      console.error(error);
+    } else {
+      this.comments = data as Comment[];
+    }
+    this.loading = false;
   }
 
-  deleteComment(id: string) {
+  async deleteComment(id: string) {
     if (!confirm('¿Seguro de que deseas eliminar este comentario? Acción irreversible.')) return;
     
-    this.http.delete(`${environment.apiUrl}/admin/comments/${id}`).subscribe({
-      next: () => {
-        this.comments = this.comments.filter(c => c.id !== id);
-      },
-      error: (err) => {
-        alert('Error al eliminar comentario');
-        console.error(err);
-      }
-    });
+    const { error } = await this.sb.client
+      .from('comments')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      alert('Error al eliminar comentario: ' + error.message);
+      console.error(error);
+    } else {
+      this.comments = this.comments.filter(c => c.id !== id);
+    }
   }
 }

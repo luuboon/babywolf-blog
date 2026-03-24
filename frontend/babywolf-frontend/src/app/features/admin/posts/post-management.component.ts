@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
+import { SupabaseService } from '../../../core/services/supabase.service';
 
 interface Post {
   id: string;
   title: string;
-  author: { email: string };
+  slug: string;
+  category: string;
   created_at: string;
   published: boolean;
+  users?: { email: string; username: string } | null;
 }
 
 @Component({
@@ -24,50 +25,55 @@ export class PostManagementComponent implements OnInit {
   loading = true;
   errorMsg = '';
 
-  constructor(private http: HttpClient) {}
+  private sb = inject(SupabaseService);
 
   ngOnInit() {
     this.loadPosts();
   }
 
-  loadPosts() {
+  async loadPosts() {
     this.loading = true;
-    this.http.get<Post[]>(`${environment.apiUrl}/admin/posts`).subscribe({
-      next: (data) => {
-        this.posts = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.errorMsg = 'Error al cargar posts administrables.';
-        this.loading = false;
-        console.error(err);
-      }
-    });
+    const { data, error } = await this.sb.client
+      .from('posts')
+      .select('*, users(email, username)')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      this.errorMsg = 'Error al cargar posts: ' + error.message;
+      console.error(error);
+    } else {
+      this.posts = data as Post[];
+    }
+    this.loading = false;
   }
 
-  deletePost(id: string) {
+  async deletePost(id: string) {
     if (!confirm('¿Seguro de que deseas eliminar este post permanentemente?')) return;
     
-    this.http.delete(`${environment.apiUrl}/admin/posts/${id}`).subscribe({
-      next: () => {
-        this.posts = this.posts.filter(p => p.id !== id);
-      },
-      error: (err) => {
-        alert('Error al eliminar post');
-        console.error(err);
-      }
-    });
+    const { error } = await this.sb.client
+      .from('posts')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      alert('Error al eliminar post: ' + error.message);
+      console.error(error);
+    } else {
+      this.posts = this.posts.filter(p => p.id !== id);
+    }
   }
 
-  togglePublish(post: Post) {
-    this.http.put(`${environment.apiUrl}/admin/posts/${post.id}/publish`, { published: !post.published }).subscribe({
-      next: () => {
-        post.published = !post.published;
-      },
-      error: (err) => {
-        alert('Error al actualizar estado de publicación');
-        console.error(err);
-      }
-    });
+  async togglePublish(post: Post) {
+    const { error } = await this.sb.client
+      .from('posts')
+      .update({ published: !post.published })
+      .eq('id', post.id);
+
+    if (error) {
+      alert('Error al actualizar estado de publicación: ' + error.message);
+      console.error(error);
+    } else {
+      post.published = !post.published;
+    }
   }
 }

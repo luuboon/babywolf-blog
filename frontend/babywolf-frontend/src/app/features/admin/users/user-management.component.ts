@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
+import { SupabaseService } from '../../../core/services/supabase.service';
 
 interface User {
   id: string;
   email: string;
+  username: string;
   role: string;
   created_at: string;
 }
@@ -23,52 +23,57 @@ export class UserManagementComponent implements OnInit {
   loading = true;
   errorMsg = '';
 
-  constructor(private http: HttpClient) {}
+  private sb = inject(SupabaseService);
 
   ngOnInit() {
     this.loadUsers();
   }
 
-  loadUsers() {
+  async loadUsers() {
     this.loading = true;
-    this.http.get<User[]>(`${environment.apiUrl}/admin/users`).subscribe({
-      next: (data) => {
-        this.users = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.errorMsg = 'Error al cargar usuarios. ¿Eres administrador?';
-        this.loading = false;
-        console.error(err);
-      }
-    });
+    const { data, error } = await this.sb.client
+      .from('users')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      this.errorMsg = 'Error al cargar usuarios: ' + error.message;
+      console.error(error);
+    } else {
+      this.users = data as User[];
+    }
+    this.loading = false;
   }
 
-  deleteUser(id: string) {
+  async deleteUser(id: string) {
     if (!confirm('¿Estás seguro de eliminar este usuario?')) return;
     
-    this.http.delete(`${environment.apiUrl}/admin/users/${id}`).subscribe({
-      next: () => {
-        this.users = this.users.filter(u => u.id !== id);
-      },
-      error: (err) => {
-        alert('Error al eliminar usuario');
-        console.error(err);
-      }
-    });
+    const { error } = await this.sb.client
+      .from('users')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      alert('Error al eliminar usuario: ' + error.message);
+      console.error(error);
+    } else {
+      this.users = this.users.filter(u => u.id !== id);
+    }
   }
 
-  toggleRole(user: User) {
+  async toggleRole(user: User) {
     const newRole = user.role === 'admin' ? 'user' : 'admin';
     
-    this.http.put(`${environment.apiUrl}/admin/users/${user.id}/role`, { role: newRole }).subscribe({
-      next: () => {
-        user.role = newRole;
-      },
-      error: (err) => {
-        alert('Error al actualizar rol');
-        console.error(err);
-      }
-    });
+    const { error } = await this.sb.client
+      .from('users')
+      .update({ role: newRole })
+      .eq('id', user.id);
+
+    if (error) {
+      alert('Error al actualizar rol: ' + error.message);
+      console.error(error);
+    } else {
+      user.role = newRole;
+    }
   }
 }

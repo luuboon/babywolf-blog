@@ -1,0 +1,48 @@
+<div class="admin-container">
+  <!-- HEADER -->
+  <header class="admin-header">
+    <div class="header-left">
+      <button class="menu-toggle" (click)="toggleSidebar()">☰</button>
+      <h1 class="brand">ADMIN<span class="brand-accent">PANEL</span></h1>
+    </div>
+    <div class="header-right">
+      <a routerLink="/" class="back-btn">← Volver al Blog</a>
+    </div>
+  </header>
+
+  <!-- BODY -->
+  <div class="admin-body">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar" [class.collapsed]="isSidebarCollapsed">
+      <div class="sidebar-toggle-wrapper">
+        <button class="collapse-btn" (click)="toggleSidebar()">
+          {{ isSidebarCollapsed ? '→' : '←' }}
+        </button>
+      </div>
+
+      <nav class="admin-nav">
+        <div class="section-title" *ngIf="!isSidebarCollapsed">Panel Principal</div>
+        @for (item of adminMenu; track item.label) {
+          <a
+            class="admin-link"
+            [routerLink]="item.routerLink"
+            routerLinkActive="active-link"
+            [routerLinkActiveOptions]="{exact: item.routerLink === '/admin'}"
+          >
+            <span class="nav-icon">{{ item.icon }}</span>
+            @if (!isSidebarCollapsed) {
+              <span class="nav-label">{{ item.label }}</span>
+            }
+          </a>
+        }
+      </nav>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="admin-content">
+      <div class="admin-content-wrapper">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+</div>

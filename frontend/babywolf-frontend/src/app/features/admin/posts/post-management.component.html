@@ -29,7 +29,7 @@
       <tbody>
         <tr *ngFor="let post of posts" style="border-bottom: var(--border-width) solid var(--color-border);">
           <td style="padding: var(--spacing-md); font-weight: bold;">{{ post.title }}</td>
-          <td style="padding: var(--spacing-md);">{{ post.author.email }}</td>
+          <td style="padding: var(--spacing-md);">{{ post.users?.username || post.users?.email || 'Sin autor' }}</td>
           <td style="padding: var(--spacing-md);">
             <span [style.color]="post.published ? 'green' : 'orange'">
               {{ post.published ? 'Publicado' : 'Borrador' }}

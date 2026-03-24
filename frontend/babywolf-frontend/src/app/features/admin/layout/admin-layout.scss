@@ -1,0 +1,228 @@
+:host {
+  --bg-dark: #1b1b1b;
+  --bg-surface: #2a2a2a;
+  --bg-main: #f6f2ec;
+  --color-accent: #d94f4f;
+  --color-text-light: #f6f2ec;
+  --color-text-dark: #1b1b1b;
+  --color-muted: #999;
+  --border-w: 3px;
+  --radius: 6px;
+  --font-heading: 'Courier New', Courier, monospace;
+}
+
+.admin-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-heading);
+}
+
+/* ==================== HEADER ==================== */
+.admin-header {
+  height: 60px;
+  background: var(--bg-dark);
+  color: var(--color-text-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  border-bottom: var(--border-w) solid var(--color-accent);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.menu-toggle {
+  background: none;
+  border: 2px solid rgba(246, 242, 236, 0.3);
+  color: var(--color-text-light);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: var(--radius);
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(246, 242, 236, 0.1);
+    border-color: var(--color-accent);
+  }
+}
+
+.brand {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.brand-accent {
+  color: var(--color-accent);
+}
+
+.back-btn {
+  text-decoration: none;
+  color: var(--color-text-light);
+  font-weight: 800;
+  font-size: 0.85rem;
+  border: 2px solid rgba(246, 242, 236, 0.3);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius);
+  transition: all 0.2s;
+
+  &:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+}
+
+/* ==================== BODY ==================== */
+.admin-body {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ==================== SIDEBAR ==================== */
+.admin-sidebar {
+  flex: 0 0 220px;
+  width: 220px;
+  background: var(--bg-surface);
+  border-right: var(--border-w) solid #333;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.admin-sidebar.collapsed {
+  flex: 0 0 55px;
+  width: 55px;
+}
+
+.sidebar-toggle-wrapper {
+  padding: 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.admin-sidebar.collapsed .sidebar-toggle-wrapper {
+  justify-content: center;
+}
+
+.collapse-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 2px solid #555;
+  background: var(--bg-dark);
+  color: var(--color-text-light);
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 0.75rem;
+  transition: all 0.2s;
+
+  &:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+}
+
+.admin-nav {
+  padding: 0 0.5rem;
+}
+
+.section-title {
+  font-size: 0.65rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+  margin: 0 0 0.5rem 0.5rem;
+}
+
+.admin-link {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: var(--color-text-light);
+  font-weight: 700;
+  font-size: 0.85rem;
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+  margin-bottom: 0.1rem;
+
+  &:hover {
+    background: var(--bg-dark);
+    border-left-color: var(--color-accent);
+  }
+}
+
+.active-link {
+  background: var(--bg-dark);
+  border-left-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.nav-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.nav-label {
+  white-space: nowrap;
+}
+
+.admin-sidebar.collapsed .admin-link {
+  justify-content: center;
+  padding: 0.55rem 0;
+  border-left: none;
+}
+
+/* ==================== CONTENT ==================== */
+.admin-content {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg-main);
+  overflow-y: auto;
+}
+
+.admin-content-wrapper {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  .admin-header {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .admin-sidebar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    height: calc(100vh - 60px);
+    z-index: 50;
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .admin-sidebar.collapsed {
+    flex: 0 0 0;
+    width: 0;
+    border: none;
+    box-shadow: none;
+  }
+}
