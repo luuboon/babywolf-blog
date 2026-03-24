@@ -2,6 +2,27 @@
 // Learn more: https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
+:root {
+  --color-primary: #1b1b1b;
+  --color-surface: #f6f2ec;
+  --color-border: #1b1b1b;
+  --color-text-primary: #1b1b1b;
+  --color-text-secondary: #333333;
+  --background-alt: #e6e0d6;
+  
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 64px;
+
+  --border-width: 4px;
+  --shadow-neo: 6px 6px #1b1b1b;
+
+  --font-heading: 'Courier New', Courier, monospace;
+}
+
 html {
   height: 100%;
 

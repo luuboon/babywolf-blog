@@ -1,0 +1,37 @@
+<div class="admin-dashboard">
+  <div class="header-section" style="margin-bottom: var(--spacing-md)">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-lg)">
+      <a routerLink="/admin/posts" class="neo-btn" style="width: auto; display: inline-block;">&larr; Volver</a>
+      <h1 style="margin: 0; font-size: 2rem;">Nuevo Post</h1>
+    </div>
+  </div>
+
+  <div *ngIf="errorMsg" class="error-alert" style="margin-bottom: var(--spacing-md)">
+    {{ errorMsg }}
+  </div>
+
+  <div class="neo-card" style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+    <div>
+      <label style="font-weight: bold; display: block; margin-bottom: var(--spacing-xs)">Título</label>
+      <input type="text" [(ngModel)]="title" class="neo-input" placeholder="Ej: Bienvenidos al Blog 90s" />
+    </div>
+
+    <div>
+      <label style="font-weight: bold; display: block; margin-bottom: var(--spacing-xs)">Imagen de Portada (Storage)</label>
+      <input type="file" (change)="onFileSelected($event)" accept="image/*" class="neo-input" [disabled]="uploadingImage" />
+      <div *ngIf="uploadingImage" style="margin-top: var(--spacing-xs); font-size: 0.9em;">Subiendo imagen...</div>
+      <div *ngIf="coverUrl" style="margin-top: var(--spacing-md);">
+        <img [src]="coverUrl" alt="Cover" style="max-width: 100%; border: var(--border-width) solid var(--color-border); box-shadow: var(--shadow-neo);" />
+      </div>
+    </div>
+
+    <div>
+      <label style="font-weight: bold; display: block; margin-bottom: var(--spacing-xs)">Contenido</label>
+      <textarea [(ngModel)]="content" class="neo-input" rows="8" placeholder="Escribe tu contenido aquí..."></textarea>
+    </div>
+
+    <button class="neo-btn primary" (click)="savePost()" [disabled]="isSubmitting || uploadingImage" style="margin-top: var(--spacing-md);">
+      {{ isSubmitting ? 'Guardando...' : 'Publicar Post' }}
+    </button>
+  </div>
+</div>

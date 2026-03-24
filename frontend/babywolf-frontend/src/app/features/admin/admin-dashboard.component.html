@@ -1,0 +1,33 @@
+<div class="admin-dashboard">
+  <div class="header-section">
+    <h1>Panel de Control ⚙️</h1>
+    <p>Área exclusiva para administradores del Baby Wolf Blog.</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card" *ngFor="let stat of stats">
+      <h3>{{ stat.title }}</h3>
+      <div class="stat-value">{{ stat.value }}</div>
+    </div>
+  </div>
+
+  <div class="admin-actions">
+    <div class="neo-card action-card">
+      <h2>Gestión de Usuarios</h2>
+      <p>Ver, suspender, o promover usuarios a roles administrativos.</p>
+      <button class="neo-btn secondary" routerLink="/admin/users">Ir a Usuarios</button>
+    </div>
+
+    <div class="neo-card action-card">
+      <h2>Gestión de Posts</h2>
+      <p>Crear nuevos posts, o administrar los posts actuales de los autores.</p>
+      <button class="neo-btn secondary" routerLink="/admin/posts">Ir a Posts</button>
+    </div>
+
+    <div class="neo-card action-card">
+      <h2>Gestión de Comentarios</h2>
+      <p>Moderar los debates en los posts y eliminar material reportado.</p>
+      <button class="neo-btn secondary" routerLink="/admin/comments">Ir a Comentarios</button>
+    </div>
+  </div>
+</div>

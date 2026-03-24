@@ -1,7 +1,12 @@
 .layout {
-  display: grid;
-  grid-template-columns: 260px 1fr;
+  display: flex;
+  flex-direction: column;
   min-height: calc(100vh - 80px); // 80px toolbar height
+
+  @media (min-width: 769px) {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+  }
 }
 
 .sidebar {
@@ -32,4 +37,51 @@
 
 .content {
   padding: 24px;
+}
+
+.app-footer {
+  width: 100%;
+  background: #e6e0d6;
+  border-top: 4px solid #1b1b1b;
+  padding: 1rem 2rem;
+  margin-top: auto;
+  min-height: 80px;
+
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 16px;
+      text-align: center;
+    }
+
+    p {
+      margin: 0;
+      color: #1b1b1b;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .footer-link {
+      color: #1b1b1b;
+      font-weight: 800;
+      text-decoration: none;
+      border: 3px solid #1b1b1b;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      box-shadow: 4px 4px #1b1b1b;
+      transition: all 0.2s ease;
+
+      &:hover,
+      &:active {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px #1b1b1b;
+      }
+    }
+  }
 }

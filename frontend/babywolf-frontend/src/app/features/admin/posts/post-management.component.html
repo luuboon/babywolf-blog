@@ -1,0 +1,56 @@
+<div class="admin-dashboard">
+  <div class="header-section" style="margin-bottom: var(--spacing-md)">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-lg)">
+      <a routerLink="/admin" class="neo-btn" style="width: auto; display: inline-block;">&larr; Volver</a>
+      <h1 style="margin: 0; font-size: 2rem;">Moderación de Posts</h1>
+      <a routerLink="/editor/new" class="neo-btn primary" style="width: auto; display: inline-block;">+ Nuevo</a>
+    </div>
+  </div>
+
+  <div *ngIf="loading" style="text-align: center; margin: var(--spacing-xl) 0;">
+    Cargando posts registrados...
+  </div>
+  
+  <div *ngIf="errorMsg" class="error-alert">
+    {{ errorMsg }}
+  </div>
+
+  <div *ngIf="!loading && !errorMsg" class="neo-card" style="padding: 0; overflow: hidden;">
+    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+      <thead style="background-color: var(--color-primary); color: var(--color-surface); font-family: var(--font-heading);">
+        <tr>
+          <th style="padding: var(--spacing-md);">Título</th>
+          <th style="padding: var(--spacing-md);">Autor</th>
+          <th style="padding: var(--spacing-md);">Estado</th>
+          <th style="padding: var(--spacing-md);">Fecha</th>
+          <th style="padding: var(--spacing-md); text-align: center;">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let post of posts" style="border-bottom: var(--border-width) solid var(--color-border);">
+          <td style="padding: var(--spacing-md); font-weight: bold;">{{ post.title }}</td>
+          <td style="padding: var(--spacing-md);">{{ post.author.email }}</td>
+          <td style="padding: var(--spacing-md);">
+            <span [style.color]="post.published ? 'green' : 'orange'">
+              {{ post.published ? 'Publicado' : 'Borrador' }}
+            </span>
+          </td>
+          <td style="padding: var(--spacing-md);">{{ post.created_at | date }}</td>
+          <td style="padding: var(--spacing-md); display: flex; gap: var(--spacing-sm); justify-content: center;">
+            <button class="neo-btn secondary" (click)="togglePublish(post)" style="padding: var(--spacing-xs) var(--spacing-sm); font-size: 0.8rem;">
+              {{ post.published ? 'Ocultar' : 'Publicar' }}
+            </button>
+            <button class="neo-btn" (click)="deletePost(post.id)" style="padding: var(--spacing-xs) var(--spacing-sm); font-size: 0.8rem; background-color: #ffcccc; color: #cc0000; border-color: #cc0000;">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="posts.length === 0">
+          <td colspan="5" style="padding: var(--spacing-xl); text-align: center;">
+            No hay posts creados.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
