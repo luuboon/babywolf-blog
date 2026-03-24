@@ -1,0 +1,17 @@
+<article class="post-card">
+    <div class="post-header">
+        <span class="console-tag">{{ post.consoleCategory }}</span>
+        <span class="post-date">{{ post.date | date:'mediumDate' }}</span>
+    </div>
+
+    <h2 class="post-title">{{ post.title }}</h2>
+    <p class="post-excerpt">{{ post.excerpt }}</p>
+
+    <div class="post-footer">
+        <span class="author">By {{ post.author }}</span>
+        <div class="stats">
+            <span class="likes">♥ {{ post.likes }}</span>
+            <span class="comments">💬 {{ post.comments.length }}</span>
+        </div>
+    </div>
+</article>

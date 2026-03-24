@@ -1,0 +1,52 @@
+.comment-section {
+    margin-top: 32px;
+    border-top: 4px solid #1b1b1b;
+    padding-top: 24px;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 900;
+    margin-bottom: 24px;
+    color: #1b1b1b;
+}
+
+.comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.comment-card {
+    background: #f6f2ec;
+    border: 2px solid #1b1b1b;
+    border-radius: 4px;
+    padding: 12px;
+    box-shadow: 3px 3px #1b1b1b;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-bottom: 1px solid rgba(#1b1b1b, 0.2);
+    padding-bottom: 4px;
+}
+
+.author {
+    color: #d32f2f;
+    /* Retro accent color */
+}
+
+.comment-text {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.no-comments {
+    font-style: italic;
+    opacity: 0.7;
+}

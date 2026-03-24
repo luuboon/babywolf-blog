@@ -1,0 +1,48 @@
+.posts-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 32px 0;
+}
+
+.page-header {
+    margin-bottom: 48px;
+    text-align: center;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 8px;
+    color: #1b1b1b;
+    text-transform: uppercase;
+    letter-spacing: -0.05em;
+}
+
+.page-subtitle {
+    font-size: 1.2rem;
+    color: #555;
+    font-weight: 500;
+}
+
+.posts-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.loading-state,
+.error-state {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 48px;
+    color: #1b1b1b;
+    background: #e6e0d6;
+    border: 4px dashed #1b1b1b;
+    border-radius: 8px;
+}
+
+.error-state {
+    color: #d32f2f;
+    border-color: #d32f2f;
+}

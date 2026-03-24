@@ -1,0 +1,29 @@
+<div class="auth-container">
+  <div class="neo-card">
+    <h2>Ingresar / Login</h2>
+    
+    <div *ngIf="errorMsg" class="error-alert">
+      {{ errorMsg }}
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" class="neo-input" placeholder="tu@email.com">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" type="password" formControlName="password" class="neo-input" placeholder="••••••••">
+      </div>
+
+      <button type="submit" class="neo-btn primary" [disabled]="loading || loginForm.invalid">
+        {{ loading ? 'Cargando...' : 'Entrar' }}
+      </button>
+    </form>
+
+    <div class="auth-links">
+      <a routerLink="/register">¿No tienes cuenta? Regístrate gratis.</a>
+    </div>
+  </div>
+</div>

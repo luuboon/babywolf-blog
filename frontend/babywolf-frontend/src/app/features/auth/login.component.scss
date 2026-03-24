@@ -1,0 +1,116 @@
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: var(--spacing-md);
+}
+
+.neo-card {
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  box-shadow: var(--shadow-neo);
+  padding: var(--spacing-xl);
+  
+  h2 {
+    margin-top: 0;
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
+    color: var(--color-text-primary);
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+  }
+}
+
+.error-alert {
+  background-color: #ffcccc;
+  border: 2px solid #ff0000;
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  color: #cc0000;
+  font-weight: bold;
+}
+
+.success-alert {
+  background-color: #ccffcc;
+  border: 2px solid #009900;
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  color: #006600;
+  font-weight: bold;
+}
+
+.form-group {
+  margin-bottom: var(--spacing-lg);
+  
+  label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+}
+
+.neo-input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: var(--border-width) solid var(--color-border);
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  transition: all 0.2s ease;
+
+  &:focus {
+    outline: none;
+    box-shadow: 4px 4px 0px var(--color-primary);
+    border-color: var(--color-primary);
+  }
+}
+
+.neo-btn {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: var(--border-width) solid var(--color-border);
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: var(--shadow-neo);
+  transition: all 0.1s ease;
+
+  &.primary {
+    background-color: var(--color-primary);
+    color: var(--color-surface);
+  }
+
+  &:hover:not(:disabled) {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px var(--color-border);
+  }
+
+  &:active:not(:disabled) {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.auth-links {
+  margin-top: var(--spacing-lg);
+  text-align: center;
+  
+  a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

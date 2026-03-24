@@ -1,0 +1,75 @@
+:host {
+    display: block;
+}
+
+.post-card {
+    background: #e6e0d6;
+    border: 3px solid #1b1b1b;
+    box-shadow: 6px 6px #1b1b1b;
+    border-radius: 6px;
+    padding: 24px;
+    transition: transform 0.1s, box-shadow 0.1s;
+    cursor: pointer;
+
+    &:hover {
+        background: #fff;
+        transform: translate(-2px, -2px);
+        box-shadow: 8px 8px #1b1b1b;
+    }
+
+    &:active {
+        transform: translate(2px, 2px);
+        box-shadow: 4px 4px #1b1b1b;
+    }
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    color: #555;
+    font-weight: 700;
+}
+
+.console-tag {
+    background: #1b1b1b;
+    color: #f6f2ec;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.post-title {
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin: 0 0 12px 0;
+    line-height: 1.2;
+}
+
+.post-excerpt {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+    color: #333;
+}
+
+.post-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border-top: 2px solid rgba(#1b1b1b, 0.1);
+    padding-top: 16px;
+}
+
+.stats {
+    display: flex;
+    gap: 16px;
+}

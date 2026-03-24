@@ -1,0 +1,17 @@
+<div class="comment-section">
+    <h3 class="section-title">Comments ({{ comments.length }})</h3>
+
+    <div class="comment-list">
+        @for (comment of comments; track comment.id) {
+        <div class="comment-card">
+            <div class="comment-header">
+                <span class="author">{{ comment.author }}</span>
+                <span class="date">{{ comment.date | date:'shortDate' }}</span>
+            </div>
+            <p class="comment-text">{{ comment.text }}</p>
+        </div>
+        } @empty {
+        <p class="no-comments">No comments yet. Be the first!</p>
+        }
+    </div>
+</div>
