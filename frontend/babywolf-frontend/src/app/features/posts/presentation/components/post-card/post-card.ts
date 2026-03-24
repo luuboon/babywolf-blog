@@ -1,11 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { Post } from '../../../domain/models/post.model';
 
 @Component({
     selector: 'app-post-card',
     standalone: true,
-    imports: [DatePipe],
+    imports: [DatePipe, RouterModule],
     templateUrl: './post-card.html',
     styleUrls: ['./post-card.scss']
 })

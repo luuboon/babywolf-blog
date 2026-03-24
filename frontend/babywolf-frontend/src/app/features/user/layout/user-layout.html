@@ -1,0 +1,81 @@
+<div class="layout-container">
+  <!-- HEADER -->
+  <header class="layout-header">
+    <div class="header-left">
+      <button class="menu-toggle" (click)="toggleSidebar()" aria-label="Toggle sidebar">
+        ☰
+      </button>
+      <a routerLink="/" class="brand-link">
+        <h1 class="brand">BABYWOLF<span class="brand-accent">BLOG</span></h1>
+      </a>
+    </div>
+
+    <div class="header-center">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          (keydown)="onSearchKeydown($event)"
+          placeholder="Buscar posts..."
+          class="search-input"
+        />
+      </div>
+    </div>
+
+    <div class="header-right">
+      <a routerLink="/login" class="header-btn">Ingresar</a>
+    </div>
+  </header>
+
+  <!-- BODY -->
+  <div class="layout-body">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" [class.collapsed]="isSidebarCollapsed">
+      <div class="sidebar-toggle-wrapper">
+        <button class="collapse-btn" (click)="toggleSidebar()" aria-label="Colapsar sidebar">
+          {{ isSidebarCollapsed ? '→' : '←' }}
+        </button>
+      </div>
+
+      <nav class="menu-section">
+        <div class="section-title" *ngIf="!isSidebarCollapsed">Navegación</div>
+        <div class="nav-list">
+          @for (item of mainMenu; track item.label) {
+            <a
+              class="sidebar-link"
+              [routerLink]="item.routerLink"
+              routerLinkActive="active-link"
+              [routerLinkActiveOptions]="{exact: item.routerLink === '/'}"
+              [title]="item.label"
+            >
+              <span class="nav-icon">{{ item.icon }}</span>
+              @if (!isSidebarCollapsed) {
+                <span class="nav-label">{{ item.label }}</span>
+              }
+            </a>
+          }
+        </div>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="content">
+      <div class="content-wrapper">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="layout-footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <span class="copyright">&copy; 2026 BabyWolf Blog. Todos los derechos reservados.</span>
+      </div>
+      <div class="footer-right">
+        <a routerLink="/terms" class="footer-link">Términos de Uso</a>
+      </div>
+    </div>
+  </footer>
+</div>

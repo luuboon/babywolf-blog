@@ -8,11 +8,15 @@ export interface Comment {
 export interface Post {
     id: string;
     title: string;
+    slug: string;
     excerpt: string;
     content: string;
     author: string;
+    authorId: string;
     date: Date;
-    consoleCategory: 'SNES' | 'SEGA' | 'PS1' | 'N64' | 'DREAMCAST' | 'OTHER';
+    category: string;
+    coverImageUrl: string;
+    published: boolean;
     comments: Comment[];
     likes: number;
 }

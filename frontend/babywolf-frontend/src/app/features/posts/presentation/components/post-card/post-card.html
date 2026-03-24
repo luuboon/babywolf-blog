@@ -1,6 +1,6 @@
-<article class="post-card">
+<article class="post-card" [routerLink]="['/posts', post.slug]">
     <div class="post-header">
-        <span class="console-tag">{{ post.consoleCategory }}</span>
+        <span class="category-tag">{{ post.category }}</span>
         <span class="post-date">{{ post.date | date:'mediumDate' }}</span>
     </div>
 

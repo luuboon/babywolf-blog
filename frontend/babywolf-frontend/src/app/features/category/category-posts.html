@@ -1,0 +1,30 @@
+<div class="category-page">
+  <header class="page-header">
+    <h1 class="page-title">📂 {{ categoryName | titlecase }}</h1>
+    <p class="page-subtitle">Posts en la categoría "{{ categoryName }}"</p>
+  </header>
+
+  @if (isLoading) {
+    <div class="loading-state"><p>Cargando posts...</p></div>
+  } @else if (posts.length === 0) {
+    <div class="empty-state">
+      <p>No hay posts en esta categoría todavía.</p>
+      <a routerLink="/posts" class="neo-btn">Ver todos los posts</a>
+    </div>
+  } @else {
+    <div class="posts-grid">
+      @for (post of posts; track post.id) {
+        <a [routerLink]="['/posts', post.slug]" class="post-card">
+          <span class="post-category">{{ post.category }}</span>
+          <h2 class="post-title">{{ post.title }}</h2>
+          <p class="post-excerpt">{{ post.excerpt }}</p>
+          <div class="post-meta">
+            <span>Por {{ post.author }}</span>
+            <span>♥ {{ post.likes }}</span>
+            <span>💬 {{ post.comments.length }}</span>
+          </div>
+        </a>
+      }
+    </div>
+  }
+</div>

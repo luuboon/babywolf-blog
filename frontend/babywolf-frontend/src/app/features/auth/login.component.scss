@@ -1,92 +1,110 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #1b1b1b;
+  font-family: 'Courier New', Courier, monospace;
+}
+
 .auth-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 80vh;
-  padding: var(--spacing-md);
+  width: 100%;
+  padding: 2rem 1rem;
 }
 
 .neo-card {
   width: 100%;
-  max-width: 400px;
-  background-color: var(--color-surface);
-  border: var(--border-width) solid var(--color-border);
-  box-shadow: var(--shadow-neo);
-  padding: var(--spacing-xl);
-  
+  max-width: 420px;
+  background: #f6f2ec;
+  border: 4px solid #1b1b1b;
+  box-shadow: 8px 8px #d94f4f;
+  padding: 2.5rem 2rem;
+  border-radius: 8px;
+
   h2 {
-    margin-top: 0;
-    margin-bottom: var(--spacing-lg);
+    margin: 0 0 1.5rem;
     text-align: center;
-    color: var(--color-text-primary);
-    font-family: var(--font-heading);
+    color: #1b1b1b;
+    font-weight: 900;
+    font-size: 1.5rem;
     text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
 }
 
 .error-alert {
-  background-color: #ffcccc;
-  border: 2px solid #ff0000;
-  padding: var(--spacing-sm);
-  margin-bottom: var(--spacing-md);
-  color: #cc0000;
-  font-weight: bold;
-}
-
-.success-alert {
-  background-color: #ccffcc;
-  border: 2px solid #009900;
-  padding: var(--spacing-sm);
-  margin-bottom: var(--spacing-md);
-  color: #006600;
-  font-weight: bold;
+  background: #ffcccc;
+  border: 3px solid #d94f4f;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  color: #9a1c1c;
+  font-weight: 800;
+  border-radius: 4px;
+  font-size: 0.85rem;
 }
 
 .form-group {
-  margin-bottom: var(--spacing-lg);
-  
+  margin-bottom: 1.25rem;
+
   label {
     display: block;
-    margin-bottom: var(--spacing-xs);
-    font-weight: 600;
-    color: var(--color-text-primary);
+    margin-bottom: 0.25rem;
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: #1b1b1b;
+    letter-spacing: 0.04em;
   }
 }
 
 .neo-input {
   width: 100%;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: var(--border-width) solid var(--color-border);
-  background-color: var(--color-background);
-  color: var(--color-text-primary);
-  font-family: var(--font-body);
-  transition: all 0.2s ease;
+  padding: 0.6rem 0.75rem;
+  border: 3px solid #1b1b1b;
+  background: #fff;
+  color: #1b1b1b;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: all 0.2s;
 
   &:focus {
     outline: none;
-    box-shadow: 4px 4px 0px var(--color-primary);
-    border-color: var(--color-primary);
+    box-shadow: 4px 4px #d94f4f;
+    border-color: #d94f4f;
+  }
+
+  &::placeholder {
+    color: rgba(27, 27, 27, 0.4);
   }
 }
 
 .neo-btn {
   width: 100%;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: var(--border-width) solid var(--color-border);
-  font-family: var(--font-heading);
+  padding: 0.65rem 1rem;
+  border: 3px solid #1b1b1b;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 900;
   text-transform: uppercase;
+  letter-spacing: 0.06em;
   cursor: pointer;
-  box-shadow: var(--shadow-neo);
-  transition: all 0.1s ease;
+  box-shadow: 4px 4px #1b1b1b;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  transition: all 0.1s;
 
   &.primary {
-    background-color: var(--color-primary);
-    color: var(--color-surface);
+    background: #1b1b1b;
+    color: #f6f2ec;
   }
 
   &:hover:not(:disabled) {
     transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0px var(--color-border);
+    box-shadow: 6px 6px #1b1b1b;
   }
 
   &:active:not(:disabled) {
@@ -95,20 +113,21 @@
   }
 
   &:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: not-allowed;
   }
 }
 
 .auth-links {
-  margin-top: var(--spacing-lg);
+  margin-top: 1.25rem;
   text-align: center;
-  
+
   a {
-    color: var(--color-primary);
+    color: #d94f4f;
     text-decoration: none;
-    font-weight: 600;
-    
+    font-weight: 800;
+    font-size: 0.85rem;
+
     &:hover {
       text-decoration: underline;
     }

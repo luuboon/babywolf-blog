@@ -1,48 +1,38 @@
-<div class="home-hero">
-  <div class="hero-box">
-    <h1 class="hero-title">🐺 BabyWolf Blog</h1>
-    <p class="hero-subtitle">Tu espacio retro para compartir ideas, código y creatividad.</p>
-    <div class="hero-actions">
-      <a routerLink="/posts" class="neo-btn primary">Ver Posts</a>
-      <a routerLink="/login" class="neo-btn">Iniciar Sesión</a>
+<div class="home-page">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">BABYWOLF<span class="accent">BLOG</span></h1>
+      <p class="hero-subtitle">Opiniones, análisis y nostalgia del mundo retro-gaming.</p>
+      <a routerLink="/posts" class="hero-btn">Ver todos los posts →</a>
     </div>
-  </div>
+  </section>
+
+  <!-- RECENT POSTS -->
+  <section class="recent-section">
+    <h2 class="section-title">📰 Últimos Posts</h2>
+
+    @if (isLoading) {
+      <div class="loading-state"><p>Cargando posts...</p></div>
+    } @else if (recentPosts.length === 0) {
+      <p class="empty-state">No hay posts publicados todavía.</p>
+    } @else {
+      <div class="posts-grid">
+        @for (post of recentPosts; track post.id) {
+          <a [routerLink]="['/posts', post.slug]" class="post-card">
+            <div class="card-top">
+              <span class="card-category">{{ post.category }}</span>
+              <span class="card-date">{{ post.date | date:'shortDate' }}</span>
+            </div>
+            <h3 class="card-title">{{ post.title }}</h3>
+            <p class="card-excerpt">{{ post.excerpt }}</p>
+            <div class="card-footer">
+              <span class="card-author">{{ post.author }}</span>
+              <span class="card-stats">♥ {{ post.likes }} · 💬 {{ post.comments.length }}</span>
+            </div>
+          </a>
+        }
+      </div>
+    }
+  </section>
 </div>
-
-<section class="home-section">
-  <h2 class="section-title">¿Qué es BabyWolf Blog?</h2>
-  <div class="feature-grid">
-    <div class="feature-card">
-      <div class="feature-icon">📝</div>
-      <h3>Publica tus Ideas</h3>
-      <p>Comparte tus pensamientos, tutoriales y reflexiones con el mundo.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">💬</div>
-      <h3>Comenta y Conecta</h3>
-      <p>Interactúa con otros usuarios a través de comentarios en cada post.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🔒</div>
-      <h3>Seguro y Confiable</h3>
-      <p>Autenticación JWT, roles de admin, y almacenamiento en la nube.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🎨</div>
-      <h3>Estética Retro 90s</h3>
-      <p>Diseño neo-brutalist inspirado en la era dorada de internet.</p>
-    </div>
-  </div>
-</section>
-
-<section class="home-section">
-  <h2 class="section-title">Tecnologías</h2>
-  <div class="tech-strip">
-    <span class="tech-badge">Angular 21</span>
-    <span class="tech-badge">Golang</span>
-    <span class="tech-badge">Supabase</span>
-    <span class="tech-badge">PostgreSQL</span>
-    <span class="tech-badge">Vercel</span>
-    <span class="tech-badge">Clean Architecture</span>
-  </div>
-</section>

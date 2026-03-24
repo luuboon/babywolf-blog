@@ -1,0 +1,52 @@
+@if (isLoading) {
+  <div class="loading-state">
+    <p>Cargando artículo...</p>
+  </div>
+} @else if (error) {
+  <div class="error-state">
+    <h2>⚠️ {{ error }}</h2>
+    <a routerLink="/posts" class="neo-btn">← Volver a Posts</a>
+  </div>
+} @else if (post) {
+  <article class="post-detail">
+    @if (post.coverImageUrl) {
+      <div class="cover-image">
+        <img [src]="post.coverImageUrl" [alt]="post.title" />
+      </div>
+    }
+
+    <header class="post-header">
+      <span class="category-badge">{{ post.category }}</span>
+      <h1 class="post-title">{{ post.title }}</h1>
+      <div class="post-meta">
+        <span class="author">Por <strong>{{ post.author }}</strong></span>
+        <span class="separator">•</span>
+        <span class="date">{{ post.date | date:'longDate' }}</span>
+        <span class="separator">•</span>
+        <span class="likes">♥ {{ post.likes }}</span>
+      </div>
+    </header>
+
+    <div class="post-content" [innerHTML]="post.content"></div>
+
+    <section class="comments-section">
+      <h2 class="comments-title">Comentarios ({{ post.comments.length }})</h2>
+
+      @if (post.comments.length === 0) {
+        <p class="no-comments">No hay comentarios todavía. ¡Sé el primero!</p>
+      } @else {
+        <div class="comments-list">
+          @for (comment of post.comments; track comment.id) {
+            <div class="comment-card">
+              <div class="comment-header">
+                <strong>{{ comment.author }}</strong>
+                <span class="comment-date">{{ comment.date | date:'mediumDate' }}</span>
+              </div>
+              <p class="comment-text">{{ comment.text }}</p>
+            </div>
+          }
+        </div>
+      }
+    </section>
+  </article>
+}

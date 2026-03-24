@@ -1,13 +1,10 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-
-import { Header } from './core/layout/header/header';
-import { ExternalLinks } from './shared/ui/external-links/external-links';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterModule, Header, ExternalLinks],
-  templateUrl: './app.html',
-  styleUrls: ['./app.scss'],
+  imports: [RouterOutlet],
+  template: '<router-outlet></router-outlet>',
+  styles: [':host { display: block; min-height: 100vh; }'],
 })
 export class App { }
