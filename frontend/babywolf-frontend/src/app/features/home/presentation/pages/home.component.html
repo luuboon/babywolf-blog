@@ -19,16 +19,27 @@
     } @else {
       <div class="posts-grid">
         @for (post of recentPosts; track post.id) {
-          <a [routerLink]="['/posts', post.slug]" class="post-card">
-            <div class="card-top">
-              <span class="card-category">{{ post.category }}</span>
-              <span class="card-date">{{ post.date | date:'shortDate' }}</span>
-            </div>
-            <h3 class="card-title">{{ post.title }}</h3>
-            <p class="card-excerpt">{{ post.excerpt }}</p>
-            <div class="card-footer">
-              <span class="card-author">{{ post.author }}</span>
-              <span class="card-stats">♥ {{ post.likes }} · 💬 {{ post.comments.length }}</span>
+          <a [routerLink]="['/posts', post.slug]" class="post-card" [class.featured]="$first">
+            @if (post.coverImageUrl) {
+              <div class="card-image">
+                <img [src]="post.coverImageUrl" [alt]="post.title" loading="lazy" />
+              </div>
+            } @else {
+              <div class="card-image placeholder">
+                <span>BABYWOLF</span>
+              </div>
+            }
+            <div class="card-body">
+              <div class="card-top">
+                <span class="card-category">{{ post.category }}</span>
+                <span class="card-date">{{ post.date | date:'mediumDate' }}</span>
+              </div>
+              <h3 class="card-title">{{ post.title }}</h3>
+              <p class="card-excerpt">{{ post.excerpt }}</p>
+              <div class="card-footer">
+                <span class="card-author">Por {{ post.author }}</span>
+                <span class="card-stats">⭐ {{ post.likes }}</span>
+              </div>
             </div>
           </a>
         }

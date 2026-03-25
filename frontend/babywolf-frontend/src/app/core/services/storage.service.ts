@@ -1,7 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { from, Observable, map } from 'rxjs';
+import { SupabaseService } from './supabase.service';
 
 export interface UploadResponse {
   message: string;
@@ -12,14 +11,22 @@ export interface UploadResponse {
   providedIn: 'root'
 })
 export class StorageService {
-  private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/admin/upload`;
+  private supabase = inject(SupabaseService);
 
-  uploadFile(file: File, folder: string = 'uploads'): Observable<UploadResponse> {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('folder', folder);
+  uploadFile(file: File, bucket: string = 'blog_assets'): Observable<UploadResponse> {
+    const fileName = `${Date.now()}_${file.name.replace(/\s/g, '_')}`;
+    const filePath = `${fileName}`;
 
-    return this.http.post<UploadResponse>(this.apiUrl, formData);
+    return from(this.supabase.client.storage.from(bucket).upload(filePath, file)).pipe(
+      map(res => {
+        if (res.error) throw res.error;
+        
+        const { data } = this.supabase.client.storage.from(bucket).getPublicUrl(filePath);
+        return {
+          message: 'Archivo subido con éxito',
+          url: data.publicUrl
+        };
+      })
+    );
   }
 }

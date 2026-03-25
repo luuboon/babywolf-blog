@@ -69,6 +69,10 @@ export const routes: Routes = [
       {
         path: 'terms',
         loadComponent: () => import('./features/legal/presentation/pages/terms-page/terms-page').then(m => m.TermsPage)
+      },
+      {
+        path: 'profile',
+        loadComponent: () => import('./features/user/profile/profile.page').then(m => m.ProfilePage)
       }
     ]
   }

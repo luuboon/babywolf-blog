@@ -11,9 +11,9 @@ export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(): Observable<boolean | UrlTree> {
-    return from(this.authService.getSession()).pipe(
-      map(({ data }) => {
-        if (data?.session) {
+    return from(this.authService.checkIsAdmin()).pipe(
+      map((isAdmin) => {
+        if (isAdmin) {
           return true;
         }
         return this.router.parseUrl('/login');

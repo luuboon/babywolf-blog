@@ -7,19 +7,33 @@
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input id="email" type="email" formControlName="email" class="neo-input" placeholder="tu@email.com">
-      </div>
+      @if (!requiresMfa) {
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input id="email" type="email" formControlName="email" class="neo-input" placeholder="tu@email.com">
+        </div>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input id="password" type="password" formControlName="password" class="neo-input" placeholder="••••••••">
-      </div>
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <input id="password" type="password" formControlName="password" class="neo-input" placeholder="••••••••">
+        </div>
 
-      <button type="submit" class="neo-btn primary" [disabled]="loading || loginForm.invalid">
-        {{ loading ? 'Cargando...' : 'Entrar' }}
-      </button>
+        <button type="submit" class="neo-btn primary" [disabled]="loading || loginForm.invalid">
+          {{ loading ? 'Cargando...' : 'Entrar' }}
+        </button>
+      } @else {
+        <div class="mfa-challenge">
+          <p class="mfa-help">Esta cuenta está protegida por Autenticación de Dos Pasos (2FA).</p>
+          <div class="form-group">
+            <label for="mfaCode">Código de Google Authenticator</label>
+            <input id="mfaCode" type="text" [(ngModel)]="mfaCode" [ngModelOptions]="{standalone: true}" class="neo-input text-center" placeholder="000000" maxlength="6" autocomplete="one-time-code">
+          </div>
+
+          <button type="submit" class="neo-btn btn-success" [disabled]="loading || mfaCode.length < 6">
+            {{ loading ? 'Verificando...' : 'Verificar e Ingresar' }}
+          </button>
+        </div>
+      }
     </form>
 
     <div class="auth-links">

@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../core/services/auth.service';
 
 interface MenuItem {
   label: string;
@@ -19,6 +20,10 @@ interface MenuItem {
 export class UserLayoutComponent {
   isSidebarCollapsed = false;
   searchQuery = '';
+  
+  authService = inject(AuthService);
+  currentUser$ = this.authService.currentUser$;
+  isAdmin$ = this.authService.isAdmin$;
 
   mainMenu: MenuItem[] = [
     { label: 'Inicio', icon: '🏠', routerLink: '/' },
@@ -46,5 +51,10 @@ export class UserLayoutComponent {
     if (event.key === 'Enter') {
       this.onSearch();
     }
+  }
+
+  async logout() {
+    await this.authService.signOut();
+    this.router.navigate(['/']);
   }
 }

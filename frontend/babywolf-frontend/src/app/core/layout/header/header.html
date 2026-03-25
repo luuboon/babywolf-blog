@@ -10,7 +10,15 @@
   <nav class="nav" aria-label="Navegación principal">
     <a mat-button routerLink="/">Home</a>
     <a mat-button routerLink="/posts">Posts</a>
-    <a mat-button routerLink="/contact">Contact</a>
+    
+    @if (!currentUser()) {
+      <a mat-button routerLink="/auth/login">Login</a>
+    } @else {
+      @if (isAdmin()) {
+        <a mat-button routerLink="/admin/posts" color="accent">Admin</a>
+      }
+      <button mat-button (click)="logout()">Logout</button>
+    }
   </nav>
 
 </mat-toolbar>

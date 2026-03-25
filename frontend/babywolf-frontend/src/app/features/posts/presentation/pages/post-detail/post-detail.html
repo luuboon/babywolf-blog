@@ -4,7 +4,7 @@
   </div>
 } @else if (error) {
   <div class="error-state">
-    <h2>⚠️ {{ error }}</h2>
+    <h2>👾 {{ error }}</h2>
     <a routerLink="/posts" class="neo-btn">← Volver a Posts</a>
   </div>
 } @else if (post) {
@@ -23,7 +23,7 @@
         <span class="separator">•</span>
         <span class="date">{{ post.date | date:'longDate' }}</span>
         <span class="separator">•</span>
-        <span class="likes">♥ {{ post.likes }}</span>
+        <span class="likes">⭐ {{ post.likes }}</span>
       </div>
     </header>
 
@@ -31,6 +31,33 @@
 
     <section class="comments-section">
       <h2 class="comments-title">Comentarios ({{ post.comments.length }})</h2>
+
+      @if (authService.currentUser$ | async; as user) {
+        <div class="comment-form">
+          <textarea 
+            [(ngModel)]="newCommentText" 
+            placeholder="Escribe un comentario..." 
+            rows="3" 
+            class="comment-input">
+          </textarea>
+          <div class="form-actions">
+            <button 
+              class="neo-btn submit-btn" 
+              [disabled]="!newCommentText.trim() || isSubmittingComment" 
+              (click)="submitComment()">
+              {{ isSubmittingComment ? 'Enviando...' : 'Comentar' }}
+            </button>
+          </div>
+          @if (commentError) {
+            <p class="error-msg">{{ commentError }}</p>
+          }
+        </div>
+      } @else {
+        <div class="login-prompt">
+          <p><a routerLink="/auth/login" class="link">Inicia sesión</a> para dejar un comentario.</p>
+        </div>
+      }
+
 
       @if (post.comments.length === 0) {
         <p class="no-comments">No hay comentarios todavía. ¡Sé el primero!</p>

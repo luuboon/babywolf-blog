@@ -1,4 +1,9 @@
 <article class="post-card" [routerLink]="['/posts', post.slug]">
+    @if (post.coverImageUrl) {
+      <div class="card-image">
+        <img [src]="post.coverImageUrl" [alt]="post.title" loading="lazy" />
+      </div>
+    }
     <div class="post-header">
         <span class="category-tag">{{ post.category }}</span>
         <span class="post-date">{{ post.date | date:'mediumDate' }}</span>
@@ -10,7 +15,7 @@
     <div class="post-footer">
         <span class="author">By {{ post.author }}</span>
         <div class="stats">
-            <span class="likes">♥ {{ post.likes }}</span>
+            <span class="likes">⭐ {{ post.likes }}</span>
             <span class="comments">💬 {{ post.comments.length }}</span>
         </div>
     </div>
