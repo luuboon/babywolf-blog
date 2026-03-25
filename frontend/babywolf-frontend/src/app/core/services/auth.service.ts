@@ -29,12 +29,18 @@ export class AuthService {
         this.loadUserRole(session.user.id);
 
         if (event === 'SIGNED_IN') {
-          // ============================================
-          // SIMULACIÓN DE ALERTA DE INICIO DE SESIÓN
-          // ============================================
-          // En una implementación real, aquí se llamaría a una Edge Function
-          // que use Resend o SendGrid mandando el email de alerta.
-          console.warn(`[Seguridad] Enviando notificación de nuevo inicio de sesión a: ${session.user.email}`);
+          // Enviar email de notificación de login via Resend
+          fetch('/api/notify-login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: session.user.email,
+              timestamp: new Date().toISOString()
+            })
+          })
+          .then(r => r.json())
+          .then(d => console.log('[Seguridad] Email de login enviado:', d))
+          .catch(e => console.warn('[Seguridad] No se pudo enviar email:', e));
         }
       } else {
         this.currentUserSubject.next(null);
