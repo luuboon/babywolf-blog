@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Post } from '../../../posts/domain/models/post.model';
@@ -16,15 +16,18 @@ export class HomeComponent implements OnInit {
   isLoading = true;
 
   private postRepo = inject(POST_REPOSITORY);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.postRepo.getPosts().subscribe({
       next: (posts) => {
         this.recentPosts = posts.slice(0, 6);
         this.isLoading = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.isLoading = false;
+        this.cdr.markForCheck();
       }
     });
   }

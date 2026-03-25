@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -25,6 +25,7 @@ export class PostDetailPage implements OnInit {
   private route = inject(ActivatedRoute);
   private postRepo = inject(POST_REPOSITORY);
   public authService = inject(AuthService);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     const slug = this.route.snapshot.paramMap.get('slug') || '';
@@ -35,10 +36,12 @@ export class PostDetailPage implements OnInit {
         if (!post) {
           this.error = 'Post no encontrado.';
         }
+        this.cdr.markForCheck();
       },
       error: () => {
         this.error = 'Error al cargar el post.';
         this.isLoading = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -53,6 +56,7 @@ export class PostDetailPage implements OnInit {
     if (!userId) {
       this.commentError = 'Debes iniciar sesión para comentar.';
       this.isSubmittingComment = false;
+      this.cdr.markForCheck();
       return;
     }
 
@@ -68,10 +72,12 @@ export class PostDetailPage implements OnInit {
         this.post = updatedPost;
         this.newCommentText = '';
         this.isSubmittingComment = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         this.commentError = 'Error al enviar el comentario.';
         this.isSubmittingComment = false;
+        this.cdr.markForCheck();
       }
     });
   }

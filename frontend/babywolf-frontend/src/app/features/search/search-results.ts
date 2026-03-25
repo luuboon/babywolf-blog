@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Post } from '../posts/domain/models/post.model';
@@ -18,6 +18,7 @@ export class SearchResultsPage implements OnInit {
 
   private route = inject(ActivatedRoute);
   private postRepo = inject(POST_REPOSITORY);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -30,6 +31,7 @@ export class SearchResultsPage implements OnInit {
     if (!this.query.trim()) {
       this.results = [];
       this.isLoading = false;
+      this.cdr.markForCheck();
       return;
     }
 
@@ -44,9 +46,11 @@ export class SearchResultsPage implements OnInit {
           p.category.toLowerCase().includes(q)
         );
         this.isLoading = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.isLoading = false;
+        this.cdr.markForCheck();
       }
     });
   }
