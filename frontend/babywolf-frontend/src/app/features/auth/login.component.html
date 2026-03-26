@@ -23,14 +23,16 @@
         </button>
       } @else {
         <div class="mfa-challenge">
-          <p class="mfa-help">Esta cuenta está protegida por Autenticación de Dos Pasos (2FA).</p>
+          <div class="mfa-icon">🛡️</div>
+          <p class="mfa-title">Verificación 2FA</p>
+          <p class="mfa-help">Esta cuenta está protegida por Autenticación de Dos Pasos. Ingresa el código de 6 dígitos de tu app Google Authenticator.</p>
           <div class="form-group">
-            <label for="mfaCode">Código de Google Authenticator</label>
+            <label for="mfaCode">Código de Autenticación</label>
             <input id="mfaCode" type="text" [(ngModel)]="mfaCode" [ngModelOptions]="{standalone: true}" class="neo-input text-center" placeholder="000000" maxlength="6" autocomplete="one-time-code">
           </div>
 
           <button type="submit" class="neo-btn btn-success" [disabled]="loading || mfaCode.length < 6">
-            {{ loading ? 'Verificando...' : 'Verificar e Ingresar' }}
+            {{ loading ? 'Verificando...' : '✅ Verificar e Ingresar' }}
           </button>
         </div>
       }

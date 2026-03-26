@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { SupabaseService } from '../../core/services/supabase.service';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private supabase: SupabaseService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -50,13 +52,24 @@ export class LoginComponent {
           return;
         } 
         
-        // Verifica si la sesión está pendiente por 2FA
-        if (data?.session === null && data?.user) {
-          // Requires MFA
+        // Check if MFA is required using Authenticator Assurance Level
+        const { data: aalData, error: aalError } = 
+          await this.supabase.client.auth.mfa.getAuthenticatorAssuranceLevel();
+        
+        if (aalError) {
+          console.error('AAL check error:', aalError);
+          // Proceed with normal login if AAL check fails
+          this.router.navigate(['/']);
+          return;
+        }
+
+        // If current level is aal1 but next level requires aal2, user needs MFA
+        if (aalData.currentLevel === 'aal1' && aalData.nextLevel === 'aal2') {
+          // User has verified TOTP factor – needs to enter code
           const { data: mfaData, error: mfaError } = await this.auth.getMfaFactors();
           if (mfaError) throw mfaError;
 
-          const totpFactor = mfaData?.all.find((f: any) => f.status === 'verified' && f.factor_type === 'totp');
+          const totpFactor = mfaData?.totp?.find((f: any) => f.status === 'verified');
           if (!totpFactor) {
             this.errorMsg = 'MFA requerido pero no hay métodos verificados.';
             this.loading = false;
@@ -66,11 +79,11 @@ export class LoginComponent {
           this.mfaFactorId = totpFactor.id;
           this.requiresMfa = true;
         } else {
-          // Login normal
+          // Login successful, no MFA needed or already aal2
           this.router.navigate(['/']);
         }
       } else {
-        // Step 2: Login with MFA Code
+        // Step 2: Verify MFA Code
         if (this.mfaCode.length < 6) {
           this.errorMsg = 'El código debe tener 6 dígitos.';
           this.loading = false;
@@ -80,6 +93,7 @@ export class LoginComponent {
         const { error } = await this.auth.verifyMfaLogin(this.mfaFactorId, this.mfaCode);
         if (error) {
           this.errorMsg = 'Código incorrecto. Intenta nuevamente.';
+          this.mfaCode = '';
         } else {
           this.router.navigate(['/']);
         }

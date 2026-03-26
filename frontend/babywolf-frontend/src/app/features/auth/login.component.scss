@@ -118,6 +118,52 @@
   }
 }
 
+.mfa-challenge {
+  text-align: center;
+
+  .mfa-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .mfa-title {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: #1b1b1b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0 0 0.75rem;
+  }
+
+  .mfa-help {
+    font-size: 0.85rem;
+    color: #444;
+    margin: 0 0 1.25rem;
+    line-height: 1.5;
+    font-weight: 700;
+  }
+
+  .form-group {
+    text-align: left;
+  }
+}
+
+.text-center {
+  text-align: center;
+  letter-spacing: 0.3em;
+  font-size: 1.4rem !important;
+}
+
+.btn-success {
+  background: #2d8a4e;
+  color: #fff;
+  border-color: #1b1b1b;
+
+  &:hover:not(:disabled) {
+    background: #24723f;
+  }
+}
+
 .auth-links {
   margin-top: 1.25rem;
   text-align: center;
