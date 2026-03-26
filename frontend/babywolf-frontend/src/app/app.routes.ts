@@ -79,6 +79,11 @@ export const routes: Routes = [
         path: 'editor/new',
         loadComponent: () => import('./features/user/editor/user-editor').then(m => m.UserEditorComponent),
         canActivate: [AuthGuard]
+      },
+      {
+        path: 'editor/:id',
+        loadComponent: () => import('./features/user/editor/user-editor').then(m => m.UserEditorComponent),
+        canActivate: [AuthGuard]
       }
     ]
   }

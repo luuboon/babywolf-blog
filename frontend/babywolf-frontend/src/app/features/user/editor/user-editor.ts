@@ -1,10 +1,11 @@
-import { Component, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { StorageService } from '../../../core/services/storage.service';
 import { SupabasePostRepository } from '../../posts/infrastructure/repositories/supabase-post.repository';
+import { SupabaseService } from '../../../core/services/supabase.service';
 
 @Component({
   selector: 'app-user-editor',
@@ -13,10 +14,12 @@ import { SupabasePostRepository } from '../../posts/infrastructure/repositories/
   template: `
     <div class="editor-page">
       <div class="editor-header">
-        <a routerLink="/posts" class="back-link">← Volver a Posts</a>
-        <h1 class="editor-title">✍️ Escribir Nuevo Post</h1>
-        <p class="editor-subtitle">Comparte tu contenido con la comunidad</p>
+        <a routerLink="/profile" class="back-link">← Volver a Mi Perfil</a>
+        <h1 class="editor-title">{{ isEditMode ? '✏️ Editar Post' : '✍️ Escribir Nuevo Post' }}</h1>
+        <p class="editor-subtitle">{{ isEditMode ? 'Modifica tu publicación' : 'Comparte tu contenido con la comunidad' }}</p>
       </div>
+
+      <div *ngIf="loadingPost" class="loading-msg">⏳ Cargando post...</div>
 
       <div *ngIf="errorMsg" class="editor-error">
         ⚠️ {{ errorMsg }}
@@ -26,7 +29,7 @@ import { SupabasePostRepository } from '../../posts/infrastructure/repositories/
         ✅ {{ successMsg }}
       </div>
 
-      <div class="editor-card">
+      <div class="editor-card" *ngIf="!loadingPost">
         <div class="field">
           <label class="field-label">Título</label>
           <input type="text" [(ngModel)]="title" class="field-input" placeholder="Ej: Mi primer post en BabyWolf 🐺" />
@@ -64,7 +67,7 @@ import { SupabasePostRepository } from '../../posts/infrastructure/repositories/
         </div>
 
         <button class="publish-btn" (click)="savePost()" [disabled]="isSubmitting || uploadingImage">
-          {{ isSubmitting ? '⏳ Publicando...' : '🚀 Publicar Post' }}
+          {{ isSubmitting ? '⏳ Guardando...' : (isEditMode ? '💾 Guardar Cambios' : '🚀 Publicar Post') }}
         </button>
       </div>
     </div>
@@ -99,6 +102,13 @@ import { SupabasePostRepository } from '../../posts/infrastructure/repositories/
       color: #666;
       margin: 0;
       font-size: 0.95rem;
+    }
+    .loading-msg {
+      text-align: center;
+      padding: 40px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #555;
     }
     .editor-error {
       background: #fff0f0;
@@ -243,7 +253,7 @@ import { SupabasePostRepository } from '../../posts/infrastructure/repositories/
     }
   `]
 })
-export class UserEditorComponent {
+export class UserEditorComponent implements OnInit {
   title = '';
   category = 'gaming';
   content = '';
@@ -251,14 +261,63 @@ export class UserEditorComponent {
 
   isSubmitting = false;
   uploadingImage = false;
+  loadingPost = false;
   errorMsg = '';
   successMsg = '';
 
+  isEditMode = false;
+  postId = '';
+
+  private route = inject(ActivatedRoute);
   private authService = inject(AuthService);
   private router = inject(Router);
   private storageService = inject(StorageService);
   private postRepo = inject(SupabasePostRepository);
+  private supabase = inject(SupabaseService);
   private cdr = inject(ChangeDetectorRef);
+
+  async ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.isEditMode = true;
+      this.postId = id;
+      await this.loadPost(id);
+    }
+  }
+
+  async loadPost(id: string) {
+    this.loadingPost = true;
+    this.cdr.detectChanges();
+
+    const { data, error } = await this.supabase.client
+      .from('posts')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error || !data) {
+      this.errorMsg = 'No se pudo cargar el post.';
+      this.loadingPost = false;
+      this.cdr.detectChanges();
+      return;
+    }
+
+    // Verify ownership
+    const userId = await this.authService.getCurrentUserId();
+    if (data.author_id !== userId) {
+      this.errorMsg = 'No tienes permiso para editar este post.';
+      this.loadingPost = false;
+      this.cdr.detectChanges();
+      return;
+    }
+
+    this.title = data.title;
+    this.category = data.category || 'gaming';
+    this.content = data.content;
+    this.coverUrl = data.cover_image_url || '';
+    this.loadingPost = false;
+    this.cdr.detectChanges();
+  }
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
@@ -288,8 +347,9 @@ export class UserEditorComponent {
 
     this.isSubmitting = true;
     this.errorMsg = '';
-    const authorId = await this.authService.getCurrentUserId();
+    this.cdr.detectChanges();
 
+    const authorId = await this.authService.getCurrentUserId();
     if (!authorId) {
       this.errorMsg = 'Debes iniciar sesión para publicar.';
       this.isSubmitting = false;
@@ -297,36 +357,62 @@ export class UserEditorComponent {
       return;
     }
 
-    const slug = this.title.toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/[\s_-]+/g, '-')
-      .replace(/^-+|-+$/g, '');
+    if (this.isEditMode) {
+      // UPDATE existing post
+      const { error } = await this.supabase.client
+        .from('posts')
+        .update({
+          title: this.title,
+          content: this.content,
+          excerpt: this.content.substring(0, 150) + '...',
+          category: this.category,
+          cover_image_url: this.coverUrl,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', this.postId)
+        .eq('author_id', authorId);
 
-    this.postRepo.createPost({
-      title: this.title,
-      slug: slug,
-      content: this.content,
-      excerpt: this.content.substring(0, 150) + '...',
-      category: this.category,
-      coverImageUrl: this.coverUrl,
-      authorId: authorId,
-      author: 'Usuario',
-      published: true,
-      comments: [],
-      likes: 0
-    }).subscribe({
-      next: () => {
-        this.successMsg = '¡Post publicado exitosamente!';
-        this.cdr.detectChanges();
-        setTimeout(() => this.router.navigate(['/posts']), 1500);
-      },
-      error: (err: any) => {
-        console.error(err);
-        this.errorMsg = 'Error al guardar: ' + (err.message || 'Intenta de nuevo');
+      if (error) {
+        this.errorMsg = 'Error al actualizar: ' + error.message;
         this.isSubmitting = false;
-        this.cdr.detectChanges();
+      } else {
+        this.successMsg = '¡Post actualizado exitosamente!';
+        setTimeout(() => this.router.navigate(['/profile']), 1500);
       }
-    });
+      this.cdr.detectChanges();
+    } else {
+      // CREATE new post
+      const slug = this.title.toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/[\s_-]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+
+      this.postRepo.createPost({
+        title: this.title,
+        slug: slug,
+        content: this.content,
+        excerpt: this.content.substring(0, 150) + '...',
+        category: this.category,
+        coverImageUrl: this.coverUrl,
+        authorId: authorId,
+        author: 'Usuario',
+        published: true,
+        comments: [],
+        likes: 0
+      }).subscribe({
+        next: () => {
+          this.successMsg = '¡Post publicado exitosamente!';
+          this.cdr.detectChanges();
+          setTimeout(() => this.router.navigate(['/profile']), 1500);
+        },
+        error: (err: any) => {
+          console.error(err);
+          this.errorMsg = 'Error al guardar: ' + (err.message || 'Intenta de nuevo');
+          this.isSubmitting = false;
+          this.cdr.detectChanges();
+        }
+      });
+    }
   }
 }
