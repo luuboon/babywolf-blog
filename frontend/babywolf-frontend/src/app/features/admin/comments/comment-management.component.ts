@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SupabaseService } from '../../../core/services/supabase.service';
@@ -24,6 +24,7 @@ export class CommentManagementComponent implements OnInit {
   errorMsg = '';
 
   private sb = inject(SupabaseService);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
     this.loadComments();
@@ -43,6 +44,7 @@ export class CommentManagementComponent implements OnInit {
       this.comments = data as Comment[];
     }
     this.loading = false;
+    this.cdr.markForCheck();
   }
 
   async deleteComment(id: string) {
@@ -59,5 +61,6 @@ export class CommentManagementComponent implements OnInit {
     } else {
       this.comments = this.comments.filter(c => c.id !== id);
     }
+    this.cdr.markForCheck();
   }
 }

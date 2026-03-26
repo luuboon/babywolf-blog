@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SupabaseService } from '../../../core/services/supabase.service';
@@ -24,6 +24,7 @@ export class UserManagementComponent implements OnInit {
   errorMsg = '';
 
   private sb = inject(SupabaseService);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
     this.loadUsers();
@@ -43,6 +44,7 @@ export class UserManagementComponent implements OnInit {
       this.users = data as User[];
     }
     this.loading = false;
+    this.cdr.markForCheck();
   }
 
   async deleteUser(id: string) {
@@ -59,6 +61,7 @@ export class UserManagementComponent implements OnInit {
     } else {
       this.users = this.users.filter(u => u.id !== id);
     }
+    this.cdr.markForCheck();
   }
 
   async toggleRole(user: User) {
@@ -75,5 +78,6 @@ export class UserManagementComponent implements OnInit {
     } else {
       user.role = newRole;
     }
+    this.cdr.markForCheck();
   }
 }

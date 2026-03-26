@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SupabaseService } from '../../../core/services/supabase.service';
@@ -26,6 +26,7 @@ export class PostManagementComponent implements OnInit {
   errorMsg = '';
 
   private sb = inject(SupabaseService);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
     this.loadPosts();
@@ -45,6 +46,7 @@ export class PostManagementComponent implements OnInit {
       this.posts = data as Post[];
     }
     this.loading = false;
+    this.cdr.markForCheck();
   }
 
   async deletePost(id: string) {
@@ -61,6 +63,7 @@ export class PostManagementComponent implements OnInit {
     } else {
       this.posts = this.posts.filter(p => p.id !== id);
     }
+    this.cdr.markForCheck();
   }
 
   async togglePublish(post: Post) {
@@ -75,5 +78,6 @@ export class PostManagementComponent implements OnInit {
     } else {
       post.published = !post.published;
     }
+    this.cdr.markForCheck();
   }
 }

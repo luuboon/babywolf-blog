@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -27,6 +27,7 @@ export class PostEditorComponent {
   private router = inject(Router);
   private storageService = inject(StorageService);
   private postRepo = inject(SupabasePostRepository);
+  private cdr = inject(ChangeDetectorRef);
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
@@ -36,10 +37,12 @@ export class PostEditorComponent {
         next: (res) => {
           this.coverUrl = res.url;
           this.uploadingImage = false;
+          this.cdr.markForCheck();
         },
         error: (err) => {
           this.errorMsg = 'Error al subir imagen. Asegúrate que el bucket "posts" sea público.';
           this.uploadingImage = false;
+          this.cdr.markForCheck();
           console.error(err);
         }
       });
@@ -58,6 +61,7 @@ export class PostEditorComponent {
     if (!authorId) {
       this.errorMsg = 'Debes estar autenticado para publicar.';
       this.isSubmitting = false;
+      this.cdr.markForCheck();
       return;
     }
 
