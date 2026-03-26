@@ -16,7 +16,7 @@ interface User {
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './user-management.component.html',
-  styleUrls: ['../admin-dashboard.component.scss']
+  styleUrls: ['./user-management.component.scss']
 })
 export class UserManagementComponent implements OnInit {
   users: User[] = [];

@@ -1,0 +1,394 @@
+// ═══════════════════════════════════════════════════════════
+//  ADMIN DESIGN SYSTEM — Dark Gaming Theme
+// ═══════════════════════════════════════════════════════════
+
+// ─── Tokens ───
+:host {
+  --admin-bg: #0f0f1a;
+  --admin-surface: #1a1a2e;
+  --admin-surface-light: #222240;
+  --admin-surface-hover: #252545;
+  --admin-accent: #e94560;
+  --admin-accent-glow: rgba(233, 69, 96, 0.35);
+  --admin-accent-secondary: #9b59b6;
+  --admin-accent-secondary-glow: rgba(155, 89, 182, 0.3);
+  --admin-text: #e8e8e8;
+  --admin-text-muted: #6c6c8a;
+  --admin-border: #2d2d4a;
+  --admin-success: #2ecc71;
+  --admin-warning: #f39c12;
+  --admin-danger: #e74c3c;
+  --admin-danger-bg: rgba(231, 76, 60, 0.12);
+  --admin-radius: 12px;
+  --admin-radius-sm: 8px;
+  --admin-font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --admin-font-mono: 'Courier New', monospace;
+}
+
+// ─── Page Wrapper ───
+.admin-page {
+  color: var(--admin-text);
+  font-family: var(--admin-font);
+}
+
+// ─── Page Header ───
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.page-subtitle {
+  font-size: 0.85rem;
+  color: var(--admin-text-muted);
+  margin: 0.25rem 0 0 0;
+}
+
+// ─── Back Button ───
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  background: var(--admin-surface-light);
+  color: var(--admin-text-muted);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-sm);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    color: var(--admin-text);
+    background: var(--admin-surface-hover);
+    border-color: var(--admin-accent);
+  }
+}
+
+// ─── Cards ───
+.admin-card {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius);
+  overflow: hidden;
+}
+
+.admin-card-glass {
+  background: rgba(26, 26, 46, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--admin-radius);
+}
+
+// ─── Buttons ───
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.2rem;
+  background: linear-gradient(135deg, var(--admin-accent), #c0392b);
+  color: #fff;
+  border: none;
+  border-radius: var(--admin-radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-decoration: none;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px var(--admin-accent-glow);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  background: var(--admin-surface-light);
+  color: var(--admin-text);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+
+  &:hover {
+    background: var(--admin-surface-hover);
+    border-color: var(--admin-accent-secondary);
+    color: #fff;
+  }
+}
+
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  background: var(--admin-danger-bg);
+  color: var(--admin-danger);
+  border: 1px solid rgba(231, 76, 60, 0.25);
+  border-radius: var(--admin-radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(231, 76, 60, 0.22);
+    border-color: var(--admin-danger);
+  }
+}
+
+.btn-success {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  background: rgba(46, 204, 113, 0.12);
+  color: var(--admin-success);
+  border: 1px solid rgba(46, 204, 113, 0.25);
+  border-radius: var(--admin-radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(46, 204, 113, 0.22);
+    border-color: var(--admin-success);
+  }
+}
+
+// ─── Tables ───
+.admin-table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--admin-radius);
+  border: 1px solid var(--admin-border);
+  background: var(--admin-surface);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+
+  thead {
+    background: rgba(233, 69, 96, 0.08);
+    border-bottom: 1px solid var(--admin-border);
+
+    th {
+      padding: 0.9rem 1rem;
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--admin-text-muted);
+      text-align: left;
+      white-space: nowrap;
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid rgba(45, 45, 74, 0.5);
+      transition: background 0.15s;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    td {
+      padding: 0.8rem 1rem;
+      color: var(--admin-text);
+      vertical-align: middle;
+    }
+  }
+}
+
+.table-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.table-empty {
+  text-align: center;
+  padding: 3rem 1rem !important;
+  color: var(--admin-text-muted);
+
+  .empty-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    opacity: 0.4;
+  }
+}
+
+// ─── Badges ───
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge-admin {
+  background: rgba(233, 69, 96, 0.15);
+  color: var(--admin-accent);
+  border: 1px solid rgba(233, 69, 96, 0.3);
+}
+
+.badge-user {
+  background: rgba(108, 108, 138, 0.15);
+  color: var(--admin-text-muted);
+  border: 1px solid rgba(108, 108, 138, 0.3);
+}
+
+.badge-published {
+  background: rgba(46, 204, 113, 0.12);
+  color: var(--admin-success);
+  border: 1px solid rgba(46, 204, 113, 0.25);
+}
+
+.badge-draft {
+  background: rgba(243, 156, 18, 0.12);
+  color: var(--admin-warning);
+  border: 1px solid rgba(243, 156, 18, 0.25);
+}
+
+// ─── Loading State ───
+.admin-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1rem;
+  color: var(--admin-text-muted);
+  gap: 1rem;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--admin-border);
+  border-top-color: var(--admin-accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// ─── Error Alert ───
+.admin-error {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.1rem;
+  background: var(--admin-danger-bg);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  border-radius: var(--admin-radius-sm);
+  color: var(--admin-danger);
+  font-size: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+
+// ─── Form Inputs ───
+.admin-input {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  background: var(--admin-surface-light);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-sm);
+  color: var(--admin-text);
+  font-size: 0.9rem;
+  font-family: var(--admin-font);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: var(--admin-text-muted);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--admin-accent);
+    box-shadow: 0 0 0 3px var(--admin-accent-glow);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+textarea.admin-input {
+  resize: vertical;
+  min-height: 180px;
+  line-height: 1.6;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--admin-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
+}
+
+// ─── Truncated Text ───
+.text-truncate {
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

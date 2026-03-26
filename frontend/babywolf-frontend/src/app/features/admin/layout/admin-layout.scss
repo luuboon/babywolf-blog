@@ -1,110 +1,142 @@
 :host {
-  --bg-dark: #1b1b1b;
-  --bg-surface: #2a2a2a;
-  --bg-main: #f6f2ec;
-  --color-accent: #d94f4f;
-  --color-text-light: #f6f2ec;
-  --color-text-dark: #1b1b1b;
-  --color-muted: #999;
-  --border-w: 3px;
-  --radius: 6px;
-  --font-heading: 'Courier New', Courier, monospace;
+  --admin-bg: #0f0f1a;
+  --admin-surface: #1a1a2e;
+  --admin-surface-light: #222240;
+  --admin-surface-hover: #252545;
+  --admin-accent: #e94560;
+  --admin-accent-glow: rgba(233, 69, 96, 0.35);
+  --admin-accent-secondary: #9b59b6;
+  --admin-text: #e8e8e8;
+  --admin-text-muted: #6c6c8a;
+  --admin-border: #2d2d4a;
+  --admin-radius: 12px;
+  --admin-radius-sm: 8px;
+  --admin-font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --admin-font-mono: 'Courier New', monospace;
 }
 
+// ═══════════════════ CONTAINER ═══════════════════
 .admin-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  font-family: var(--font-heading);
+  font-family: var(--admin-font);
+  background: var(--admin-bg);
+  color: var(--admin-text);
 }
 
-/* ==================== HEADER ==================== */
+// ═══════════════════ HEADER ═══════════════════
 .admin-header {
-  height: 60px;
-  background: var(--bg-dark);
-  color: var(--color-text-light);
+  height: 56px;
+  background: var(--admin-surface);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1.5rem;
-  border-bottom: var(--border-w) solid var(--color-accent);
+  padding: 0 1.25rem;
+  border-bottom: 1px solid var(--admin-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .menu-toggle {
   background: none;
-  border: 2px solid rgba(246, 242, 236, 0.3);
-  color: var(--color-text-light);
-  font-size: 1.2rem;
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text-muted);
+  font-size: 1rem;
   cursor: pointer;
-  padding: 0.2rem 0.4rem;
-  border-radius: var(--radius);
+  padding: 0.35rem 0.5rem;
+  border-radius: var(--admin-radius-sm);
   transition: all 0.2s;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
-    background: rgba(246, 242, 236, 0.1);
-    border-color: var(--color-accent);
+    background: var(--admin-surface-hover);
+    border-color: var(--admin-accent);
+    color: var(--admin-accent);
   }
+}
+
+.brand-link {
+  text-decoration: none;
+  color: inherit;
 }
 
 .brand {
   margin: 0;
-  font-size: 1.15rem;
-  font-weight: 900;
-  letter-spacing: 0.12em;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  font-family: var(--admin-font-mono);
+  color: var(--admin-text);
 }
 
 .brand-accent {
-  color: var(--color-accent);
+  color: var(--admin-accent);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .back-btn {
   text-decoration: none;
-  color: var(--color-text-light);
-  font-weight: 800;
-  font-size: 0.85rem;
-  border: 2px solid rgba(246, 242, 236, 0.3);
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--radius);
+  color: var(--admin-text-muted);
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-sm);
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 
   &:hover {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
+    background: var(--admin-accent);
+    border-color: var(--admin-accent);
+    color: #fff;
   }
 }
 
-/* ==================== BODY ==================== */
+// ═══════════════════ BODY ═══════════════════
 .admin-body {
   display: flex;
   flex: 1;
   min-width: 0;
 }
 
-/* ==================== SIDEBAR ==================== */
+// ═══════════════════ SIDEBAR ═══════════════════
 .admin-sidebar {
-  flex: 0 0 220px;
-  width: 220px;
-  background: var(--bg-surface);
-  border-right: var(--border-w) solid #333;
+  flex: 0 0 230px;
+  width: 230px;
+  background: var(--admin-surface);
+  border-right: 1px solid var(--admin-border);
   display: flex;
   flex-direction: column;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
+  min-height: calc(100vh - 56px);
 }
 
 .admin-sidebar.collapsed {
-  flex: 0 0 55px;
-  width: 55px;
+  flex: 0 0 60px;
+  width: 60px;
 }
 
 .sidebar-toggle-wrapper {
-  padding: 0.5rem;
+  padding: 0.75rem 0.75rem 0.25rem;
   display: flex;
   justify-content: flex-end;
 }
@@ -117,65 +149,96 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
-  border: 2px solid #555;
-  background: var(--bg-dark);
-  color: var(--color-text-light);
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--admin-border);
+  background: var(--admin-surface-light);
+  color: var(--admin-text-muted);
   border-radius: 50%;
   cursor: pointer;
   font-weight: 900;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   transition: all 0.2s;
 
   &:hover {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
+    background: var(--admin-accent);
+    border-color: var(--admin-accent);
+    color: #fff;
   }
 }
 
+// ─── Navigation ───
 .admin-nav {
-  padding: 0 0.5rem;
+  padding: 0.5rem 0.6rem;
+  flex: 1;
 }
 
 .section-title {
-  font-size: 0.65rem;
-  font-weight: 900;
+  font-size: 0.6rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-muted);
-  margin: 0 0 0.5rem 0.5rem;
+  letter-spacing: 0.12em;
+  color: var(--admin-text-muted);
+  margin: 0.5rem 0 0.5rem 0.6rem;
+  opacity: 0.7;
 }
 
 .admin-link {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  padding: 0.55rem 0.65rem;
-  border-radius: var(--radius);
+  gap: 0.7rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--admin-radius-sm);
   text-decoration: none;
-  color: var(--color-text-light);
-  font-weight: 700;
+  color: var(--admin-text-muted);
+  font-weight: 600;
   font-size: 0.85rem;
-  transition: all 0.15s;
-  border-left: 3px solid transparent;
-  margin-bottom: 0.1rem;
+  transition: all 0.2s;
+  margin-bottom: 0.15rem;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--admin-accent), var(--admin-accent-secondary));
+    border-radius: 0 4px 4px 0;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
 
   &:hover {
-    background: var(--bg-dark);
-    border-left-color: var(--color-accent);
+    background: var(--admin-surface-hover);
+    color: var(--admin-text);
+
+    &::before {
+      opacity: 0.5;
+    }
   }
 }
 
 .active-link {
-  background: var(--bg-dark);
-  border-left-color: var(--color-accent);
-  color: var(--color-accent);
+  background: var(--admin-surface-hover);
+  color: var(--admin-accent) !important;
+
+  &::before {
+    opacity: 1 !important;
+  }
+
+  .nav-icon {
+    filter: none;
+  }
 }
 
 .nav-icon {
-  font-size: 1rem;
+  font-size: 1.05rem;
   flex-shrink: 0;
+  width: 22px;
+  text-align: center;
 }
 
 .nav-label {
@@ -184,27 +247,31 @@
 
 .admin-sidebar.collapsed .admin-link {
   justify-content: center;
-  padding: 0.55rem 0;
-  border-left: none;
+  padding: 0.65rem 0;
+
+  &::before {
+    display: none;
+  }
 }
 
-/* ==================== CONTENT ==================== */
+// ═══════════════════ CONTENT ═══════════════════
 .admin-content {
   flex: 1;
   min-width: 0;
-  background: var(--bg-main);
+  background: var(--admin-bg);
   overflow-y: auto;
+  max-height: calc(100vh - 56px);
 }
 
 .admin-content-wrapper {
-  padding: 1.5rem;
+  padding: 1.75rem;
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
   box-sizing: border-box;
 }
 
-/* ==================== RESPONSIVE ==================== */
+// ═══════════════════ RESPONSIVE ═══════════════════
 @media (max-width: 768px) {
   .admin-header {
     padding: 0.5rem 0.75rem;
@@ -212,11 +279,11 @@
 
   .admin-sidebar {
     position: fixed;
-    top: 60px;
+    top: 56px;
     left: 0;
-    height: calc(100vh - 60px);
+    height: calc(100vh - 56px);
     z-index: 50;
-    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
   }
 
   .admin-sidebar.collapsed {
@@ -224,5 +291,13 @@
     width: 0;
     border: none;
     box-shadow: none;
+  }
+
+  .admin-content {
+    max-height: none;
+  }
+
+  .admin-content-wrapper {
+    padding: 1rem;
   }
 }

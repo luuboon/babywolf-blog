@@ -11,7 +11,7 @@ import { SupabasePostRepository } from '../../posts/infrastructure/repositories/
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './editor.component.html',
-  styleUrls: ['../admin-dashboard.component.scss']
+  styleUrls: ['./editor.component.scss']
 })
 export class PostEditorComponent {
   title = '';

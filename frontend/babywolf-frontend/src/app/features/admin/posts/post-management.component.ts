@@ -18,7 +18,7 @@ interface Post {
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './post-management.component.html',
-  styleUrls: ['../admin-dashboard.component.scss']
+  styleUrls: ['./post-management.component.scss']
 })
 export class PostManagementComponent implements OnInit {
   posts: Post[] = [];

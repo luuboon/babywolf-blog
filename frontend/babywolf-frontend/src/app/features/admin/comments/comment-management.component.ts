@@ -16,7 +16,7 @@ interface Comment {
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './comment-management.component.html',
-  styleUrls: ['../admin-dashboard.component.scss']
+  styleUrls: ['./comment-management.component.scss']
 })
 export class CommentManagementComponent implements OnInit {
   comments: Comment[] = [];

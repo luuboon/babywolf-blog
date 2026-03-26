@@ -1,48 +1,58 @@
-<div class="admin-dashboard">
-  <div class="header-section" style="margin-bottom: var(--spacing-md)">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-lg)">
-      <a routerLink="/admin" class="neo-btn" style="width: auto; display: inline-block;">&larr; Volver</a>
-      <h1 style="margin: 0; font-size: 2rem;">Moderación de Comentarios</h1>
-      <div style="width: 100px;"></div>
+<div class="admin-page">
+  <div class="page-header">
+    <div>
+      <a routerLink="/admin" class="btn-back">← Volver</a>
     </div>
+    <div>
+      <h1 class="page-title">Moderación de Comentarios</h1>
+      <p class="page-subtitle">Revisa y modera los comentarios de los lectores</p>
+    </div>
+    <div></div>
   </div>
 
-  <div *ngIf="loading" style="text-align: center; margin: var(--spacing-xl) 0;">
-    Cargando comentarios...
-  </div>
-  
-  <div *ngIf="errorMsg" class="error-alert">
-    {{ errorMsg }}
+  <!-- Loading -->
+  <div *ngIf="loading" class="admin-loading">
+    <div class="spinner"></div>
+    <span>Cargando comentarios...</span>
   </div>
 
-  <div *ngIf="!loading && !errorMsg" class="neo-card" style="padding: 0; overflow: hidden;">
-    <table style="width: 100%; border-collapse: collapse; text-align: left;">
-      <thead style="background-color: var(--color-primary); color: var(--color-surface); font-family: var(--font-heading);">
+  <!-- Error -->
+  <div *ngIf="errorMsg" class="admin-error">
+    ⚠️ {{ errorMsg }}
+  </div>
+
+  <!-- Table -->
+  <div *ngIf="!loading && !errorMsg" class="admin-table-wrapper">
+    <table class="admin-table">
+      <thead>
         <tr>
-          <th style="padding: var(--spacing-md);">Comentario</th>
-          <th style="padding: var(--spacing-md);">Post</th>
-          <th style="padding: var(--spacing-md);">Autor</th>
-          <th style="padding: var(--spacing-md);">Fecha</th>
-          <th style="padding: var(--spacing-md); text-align: center;">Acciones</th>
+          <th>Comentario</th>
+          <th>Post</th>
+          <th>Autor</th>
+          <th>Fecha</th>
+          <th style="text-align: right;">Acciones</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let comment of comments" style="border-bottom: var(--border-width) solid var(--color-border);">
-          <td style="padding: var(--spacing-md); max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-            {{ comment.content }}
+        <tr *ngFor="let comment of comments">
+          <td>
+            <span class="text-truncate" style="display: block;">{{ comment.content }}</span>
           </td>
-          <td style="padding: var(--spacing-md);">{{ comment.posts?.title || 'Sin post' }}</td>
-          <td style="padding: var(--spacing-md);">{{ comment.users?.username || comment.users?.email || 'Anónimo' }}</td>
-          <td style="padding: var(--spacing-md);">{{ comment.created_at | date }}</td>
-          <td style="padding: var(--spacing-md); display: flex; gap: var(--spacing-sm); justify-content: center;">
-            <button class="neo-btn" (click)="deleteComment(comment.id)" style="padding: var(--spacing-xs) var(--spacing-sm); font-size: 0.8rem; background-color: #ffcccc; color: #cc0000; border-color: #cc0000;">
-              Eliminar
-            </button>
+          <td style="color: var(--admin-text-muted);">{{ comment.posts?.title || 'Sin post' }}</td>
+          <td style="color: var(--admin-text-muted);">{{ comment.users?.username || comment.users?.email || 'Anónimo' }}</td>
+          <td style="color: var(--admin-text-muted);">{{ comment.created_at | date:'mediumDate' }}</td>
+          <td>
+            <div class="table-actions">
+              <button class="btn-danger" (click)="deleteComment(comment.id)">
+                🗑 Eliminar
+              </button>
+            </div>
           </td>
         </tr>
         <tr *ngIf="comments.length === 0">
-          <td colspan="5" style="padding: var(--spacing-xl); text-align: center;">
-            No hay comentarios para moderar.
+          <td colspan="5" class="table-empty">
+            <div class="empty-icon">💬</div>
+            <div>No hay comentarios para moderar.</div>
           </td>
         </tr>
       </tbody>
