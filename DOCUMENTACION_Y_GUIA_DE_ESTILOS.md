@@ -7,18 +7,20 @@ Este documento expone de forma exhaustiva las decisiones arquitectónicas, de se
 ## 🏛️ 1. Arquitectura del Proyecto y Patrones
 
 ### 1.1 Stack Tecnológico
-La plataforma emplea un enfoque arquitectónico **Serverless CND (Cloud Native Development)** y **SPA (Single Page Application)** moderno:
+La plataforma emplea un enfoque arquitectónico **Serverless Edge (Frontend) + Microservicio Dedicado (Backend)**:
 
 * **Frontend:** Angular v17+ (Standalones & SSR support) + TypeScript + RxJS.
-* **Backend como Servicio (BaaS):** Supabase (PostgreSQL 15, Go-based Auth API, Storage).
+* **Backend Autoritativo:** Microservicio escrito en **Golang (Go 1.25.7)** usando el framework `Gin` y el ORM `GORM`.
+* **Database & BaaS:** Supabase (PostgreSQL 15, Auth, Storage).
 * **Infraestructura y Despliegue:** Vercel (Edge computing para UI).
 * **Email Provider:** Resend (Notificaciones transaccionales y de seguridad).
 
 ### 1.2 Justificación de la Arquitectura
-**¿Por qué Angular Standalone y Supabase?**
-1. **Mantenimiento Cero de Infraestructura Backend:** Al delegar la BD, WebSockets y la API RESTful en Supabase, el coste de mantenimiento del servidor es cero. Supabase autogenera una API usando *PostgREST* documentada sobre Postgres, otorgando rendimiento de base de datos directa sin escribir un ORM intermedio.
-2. **Escalabilidad Reactiva con Angular:** Se optó por Angular RxJS ante la necesidad de manejar flujos de datos asíncronos complejos (autenticación en tiempo real, cargas de archivos, lectura del blog sin recargar páginas). La nueva versión Standalone de Angular elimina el sobrepeso de `NgModules`, ofreciendo "Tree-Shaking" perfecto, lo que significa que el peso de descarga del sitio web es mínimo.
-3. **Despliegue Global Automático:** La integración de GitHub a Vercel habilita *Continuous Deployment* (CD). Cada push a `main` orquesta un pipeline inmutable que asegura 0% de tiempo de inactividad (Zero-Downtime Deployment).
+**¿Por qué Angular + Supabase + Golang?**
+1. **Delegación Híbrida Inteligente:** Supabase gestiona la capa de datos pesada (Auth, JWT, Redes RLS, Almacenamiento S3) de forma que el costo de "levantar la BD" es nulo. Sin embargo, para tener control transaccional total de procesos adyacentes y cron-jobs, incluimos un Backend Dedicado en **Golang**.
+2. **Rendimiento Excepcional en Backend (Gin):** Golang tiene un performance de concurrencia y un uso mínimo de memoria asombroso comparado a NodeJS o Python. Al acompañarse del framework `Gin-Gonic` y `GORM`, las validaciones de negocio antes de llegar a Postgres/Supabase se ejecutan en microsegundos.
+3. **Escalabilidad Reactiva con Angular:** Se optó por Angular RxJS ante la necesidad de manejar flujos de datos asíncronos complejos.
+4. **Despliegue Global Automático:** La integración de GitHub a Vercel habilita *Continuous Deployment* (CD). Cada push a `main` orquesta un pipeline inmutable.
 
 ### 1.3 Patrones de Diseño de Software Implementados
 - **Smart / Dumb Components (Container-Presenter):** Patrón utilizado implícitamente en vistas donde el contenedor (ej. `profile.page.ts`) posee inyección de dependencias pesada y lógica de negocio, derivando datos limpios a las directivas `@if` y `@for` en el template.
