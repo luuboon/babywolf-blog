@@ -1,7 +1,6 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AuthService } from '../../../core/services/auth.service';
 import { SupabaseService } from '../../../core/services/supabase.service';
 
@@ -71,7 +70,9 @@ import { SupabaseService } from '../../../core/services/supabase.service';
               } @else {
                 <div class="mfa-enrollment">
                   <p class="step-label">1. Escanea este código QR con Google Authenticator:</p>
-                  <div class="qr-box" [innerHTML]="qrCodeHtml"></div>
+                  <div class="qr-box">
+                    <img [src]="qrCodeDataUri" alt="QR Code para Google Authenticator" class="qr-image" />
+                  </div>
                   
                   <p class="step-label">2. Ingresa el código de 6 dígitos:</p>
                   <input type="text" [(ngModel)]="mfaCode" class="field-input code-input" placeholder="000000" maxlength="6" />
@@ -330,6 +331,11 @@ import { SupabaseService } from '../../../core/services/supabase.service';
       justify-content: center;
       box-shadow: 3px 3px 0 #1b1b1b;
     }
+    .qr-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
     .mfa-actions {
       display: flex;
       gap: 10px;
@@ -357,7 +363,7 @@ import { SupabaseService } from '../../../core/services/supabase.service';
 export class ProfilePage implements OnInit {
   private authService = inject(AuthService);
   private supabase = inject(SupabaseService);
-  private sanitizer = inject(DomSanitizer);
+
   private cdr = inject(ChangeDetectorRef);
 
   profile: any = null;
@@ -370,7 +376,7 @@ export class ProfilePage implements OnInit {
   isMfaEnabled = false;
   mfaLoading = false;
   factorId = '';
-  qrCodeHtml: SafeHtml = '';
+  qrCodeDataUri = '';
   mfaCode = '';
   mfaErrorMessage = '';
 
@@ -451,7 +457,7 @@ export class ProfilePage implements OnInit {
     }
 
     this.factorId = data.id;
-    this.qrCodeHtml = this.sanitizer.bypassSecurityTrustHtml(data.totp.qr_code);
+    this.qrCodeDataUri = data.totp.qr_code;
     this.mfaLoading = false;
     this.cdr.detectChanges();
   }
@@ -478,7 +484,7 @@ export class ProfilePage implements OnInit {
   cancelMfaEnrollment() {
     this.factorId = '';
     this.mfaCode = '';
-    this.qrCodeHtml = '';
+    this.qrCodeDataUri = '';
     this.mfaErrorMessage = '';
     this.cdr.detectChanges();
   }
