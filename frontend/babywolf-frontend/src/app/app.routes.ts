@@ -72,7 +72,13 @@ export const routes: Routes = [
       },
       {
         path: 'profile',
-        loadComponent: () => import('./features/user/profile/profile.page').then(m => m.ProfilePage)
+        loadComponent: () => import('./features/user/profile/profile.page').then(m => m.ProfilePage),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'editor/new',
+        loadComponent: () => import('./features/user/editor/user-editor').then(m => m.UserEditorComponent),
+        canActivate: [AuthGuard]
       }
     ]
   }

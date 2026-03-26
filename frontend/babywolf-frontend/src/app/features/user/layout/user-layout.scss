@@ -149,6 +149,18 @@
   }
 }
 
+.write-btn {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+  font-weight: 900;
+  &:hover {
+    background: #c0392b;
+    border-color: #c0392b;
+    transform: translateY(-1px);
+  }
+}
+
 /* ==================== BODY ==================== */
 .layout-body {
   display: flex;

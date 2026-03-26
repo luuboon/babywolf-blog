@@ -25,6 +25,7 @@
 
     <div class="header-right">
       <ng-container *ngIf="currentUser$ | async as user; else guest">
+        <a routerLink="/editor/new" class="header-btn write-btn">✍️ Escribir</a>
         <a routerLink="/profile" class="header-btn profile-btn">Mi Perfil</a>
         <a routerLink="/admin" class="header-btn admin-badge" *ngIf="isAdmin$ | async">Admin</a>
         <button (click)="logout()" class="header-btn logout-btn">Cerrar</button>
