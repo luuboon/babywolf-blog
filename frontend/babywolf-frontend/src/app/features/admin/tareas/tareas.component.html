@@ -1,0 +1,126 @@
+<section class="tareas-page">
+
+  <div class="page-header">
+    <h1 class="page-title">📋 Tareas Editoriales</h1>
+    <p class="page-sub">Gestiona el flujo de trabajo del blog</p>
+  </div>
+
+  <!-- Estadísticas -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <span class="stat-num">{{ total() }}</span>
+      <span class="stat-lbl">Total</span>
+    </div>
+    <div class="stat-card pending">
+      <span class="stat-num">{{ pendientes() }}</span>
+      <span class="stat-lbl">Pendientes</span>
+    </div>
+    <div class="stat-card done">
+      <span class="stat-num">{{ completadas() }}</span>
+      <span class="stat-lbl">Completadas</span>
+    </div>
+    <div class="stat-card pct">
+      <span class="stat-num">{{ progreso() }}%</span>
+      <span class="stat-lbl">Progreso</span>
+    </div>
+  </div>
+
+  <!-- Barra de progreso -->
+  <div class="progress-track"
+       role="progressbar"
+       [attr.aria-valuenow]="progreso()"
+       aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-fill" [style.width]="progreso() + '%'"></div>
+  </div>
+
+  <!-- Agregar tarea -->
+  <div class="add-row">
+    <div class="input-wrap" [class.error]="errorMsg()">
+      <input
+        type="text"
+        class="task-input"
+        placeholder="Nueva tarea editorial..."
+        maxlength="80"
+        [(ngModel)]="nuevoTexto"
+        (keydown)="onEnter($event)"
+        (input)="limpiarError()"
+        aria-label="Texto de la nueva tarea"
+      />
+    </div>
+    <select class="priority-select" [(ngModel)]="nuevaPrioridad" aria-label="Prioridad">
+      <option value="alta">🔴 Alta</option>
+      <option value="media">🟡 Media</option>
+      <option value="baja">🟢 Baja</option>
+    </select>
+    <button class="btn-neo btn-add" (click)="agregar()" type="button">+ Agregar</button>
+  </div>
+
+  @if (errorMsg()) {
+    <div class="error-msg" role="alert" aria-live="polite">⚠ {{ errorMsg() }}</div>
+  }
+
+  <!-- Filtros -->
+  <div class="filters" role="group" aria-label="Filtrar tareas">
+    <button class="chip" [class.active]="filtro() === 'todas'"       (click)="setFiltro('todas')"       type="button">Todas</button>
+    <button class="chip" [class.active]="filtro() === 'pendientes'"  (click)="setFiltro('pendientes')"  type="button">Pendientes <span class="chip-count">{{ pendientes() }}</span></button>
+    <button class="chip" [class.active]="filtro() === 'completadas'" (click)="setFiltro('completadas')" type="button">Completadas <span class="chip-count">{{ completadas() }}</span></button>
+    @if (completadas() > 0) {
+      <button class="chip chip-clear" (click)="limpiarCompletadas()" type="button">🗑 Limpiar completadas</button>
+    }
+  </div>
+
+  <!-- Lista -->
+  <ul class="task-list" role="list" aria-label="Lista de tareas">
+
+    @if (tareasFiltradas().length === 0 && total() === 0) {
+      <li class="empty-state">
+        <span class="empty-icon">🐺</span>
+        Sin tareas editoriales. Agrega la primera arriba.
+      </li>
+    } @else if (tareasFiltradas().length === 0) {
+      <li class="empty-state">No hay tareas en "{{ filtro() }}".</li>
+    }
+
+    @for (tarea of tareasFiltradas(); track tarea.id) {
+      <li class="task-item"
+          [class.completada]="tarea.completada"
+          [attr.data-priority]="tarea.prioridad">
+
+        <input type="checkbox"
+               class="task-check"
+               [id]="'chk-' + tarea.id"
+               [checked]="tarea.completada"
+               (change)="toggleCompletar(tarea.id)"
+               [attr.aria-label]="'Completar: ' + tarea.texto"/>
+
+        <span class="priority-dot" [attr.data-p]="tarea.prioridad"></span>
+
+        @if (tarea.editando) {
+          <input type="text"
+                 class="task-edit-input"
+                 [(ngModel)]="tarea.textoEdicion"
+                 (keydown)="onEditKeydown($event, tarea)"
+                 (blur)="guardarEdicion(tarea)"
+                 maxlength="80"
+                 autofocus/>
+        } @else {
+          <span class="task-text"
+                [class.tachado]="tarea.completada"
+                title="Doble clic para editar"
+                (dblclick)="iniciarEdicion(tarea)">
+            {{ tarea.texto }}
+          </span>
+        }
+
+        <div class="task-actions">
+          @if (!tarea.editando && !tarea.completada) {
+            <button class="btn-icon btn-edit" (click)="iniciarEdicion(tarea)" type="button" aria-label="Editar">✏️</button>
+          }
+          <button class="btn-icon btn-del" (click)="eliminar(tarea.id)" type="button" [attr.aria-label]="'Eliminar: ' + tarea.texto">✕</button>
+        </div>
+
+      </li>
+    }
+  </ul>
+
+</section>

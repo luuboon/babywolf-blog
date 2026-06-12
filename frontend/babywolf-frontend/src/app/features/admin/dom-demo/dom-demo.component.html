@@ -1,0 +1,132 @@
+<div class="dom-page"
+     [class.dark]="temaOscuro()"
+     [style.font-size.px]="tamFuente()"
+     [style.--accent]="colorAcento()">
+
+  @if (bannerVisible()) {
+    <div class="banner-top" role="alert">
+      <span>{{ bannerTexto() }}</span>
+      <button class="banner-close" (click)="cerrarBanner()">✕</button>
+    </div>
+  }
+
+  <header class="demo-header">
+    <h1 class="blog-title">{{ tituloBlog() }}</h1>
+    <span class="card-count">{{ totalCards() }} cards</span>
+  </header>
+
+  <div class="controls-grid">
+
+    <div class="control-group">
+      <label class="ctrl-label">
+        <span class="ctrl-method">textContent</span>
+        Título del blog (evento input)
+      </label>
+      <input type="text" class="ctrl-input" placeholder="Escribe el título..."
+             [ngModel]="tituloBlog()"
+             (input)="actualizarTitulo($any($event.target).value)"
+             maxlength="40"/>
+    </div>
+
+    <div class="control-group">
+      <label class="ctrl-label">
+        <span class="ctrl-method">classList.toggle("dark")</span>
+        Tema del sitio (evento click)
+      </label>
+      <button class="btn-neo" (click)="toggleTema()" [class.active]="temaOscuro()" type="button">
+        {{ temaOscuro() ? '☀️ Modo claro' : '🌙 Modo oscuro' }}
+      </button>
+    </div>
+
+    <div class="control-group">
+      <label class="ctrl-label">
+        <span class="ctrl-method">style.setProperty("--accent")</span>
+        Color de acento (evento change)
+      </label>
+      <div class="color-row">
+        <input type="color" [value]="colorAcento()"
+               (change)="cambiarAcento($any($event.target).value)"
+               class="color-picker"/>
+        <code class="color-val">{{ colorAcento() }}</code>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="ctrl-label">
+        <span class="ctrl-method">style.fontSize</span>
+        Tamaño de fuente: {{ tamFuente() }}px
+      </label>
+      <input type="range" [value]="tamFuente()"
+             (input)="cambiarFuente(+$any($event.target).value)"
+             min="12" max="22" step="1" class="font-slider"/>
+    </div>
+
+  </div>
+
+  <div class="actions-row">
+    <input type="text" class="ctrl-input" placeholder="Título de nueva card..."
+           [(ngModel)]="nuevoTitulo" (keydown)="onEnter($event)" maxlength="60"/>
+    <select class="ctrl-select" [(ngModel)]="nuevaCategoria">
+      <option value="gaming">Gaming</option>
+      <option value="hardware">Hardware</option>
+      <option value="reviews">Reviews</option>
+      <option value="tutoriales">Tutoriales</option>
+    </select>
+    <button class="btn-neo btn-primary" (click)="agregarCard()" type="button">+ createElement</button>
+    <button class="btn-neo" (click)="mostrarBanner()" type="button">prepend() banner</button>
+  </div>
+
+  <div class="posts-grid" id="postsGrid">
+    @if (cards().length === 0) {
+      <p class="empty-grid">Sin cards. Usa "+ createElement" para agregar.</p>
+    }
+    @for (card of cards(); track card.id) {
+      <article class="post-card" [class.destacada]="card.destacada" [attr.data-id]="card.id">
+
+        <span class="card-cat">{{ card.categoria }}</span>
+
+        @if (cardEditandoId() === card.id) {
+          <input type="text" class="card-edit-input"
+                 [(ngModel)]="cardEditTexto"
+                 (keydown)="onEditKeydown($event, card.id)"
+                 (blur)="guardarEdicion(card.id)"
+                 maxlength="60" autofocus/>
+        } @else {
+          <h3 class="card-title" title="Doble clic para editar" (dblclick)="iniciarEdicion(card)">
+            {{ card.titulo }}
+          </h3>
+        }
+
+        @if (card.destacada) { <span class="badge-dest">⭐ Destacada</span> }
+
+        <div class="card-actions">
+          <button class="btn-icon" (click)="toggleDestacada(card.id)" type="button" [title]="card.destacada ? 'Quitar' : 'Destacar'">{{ card.destacada ? '★' : '☆' }}</button>
+          <button class="btn-icon" (click)="iniciarEdicion(card)"    type="button" title="Editar (replaceWith)">✏️</button>
+          <button class="btn-icon" (click)="duplicarCard(card)"      type="button" title="Duplicar (cloneNode)">⧉</button>
+          <button class="btn-icon btn-del" (click)="eliminarCard(card.id)" type="button" [attr.aria-label]="'Eliminar: ' + card.titulo">✕</button>
+        </div>
+
+      </article>
+    }
+  </div>
+
+  <div class="log-panel">
+    <div class="log-header">
+      <span class="log-title">📋 Log de métodos DOM ejecutados</span>
+      <button class="btn-sm" (click)="limpiarLog()" type="button">Limpiar</button>
+    </div>
+    <div class="log-body">
+      @if (log().length === 0) {
+        <p class="log-empty">Interactúa con los controles para ver los métodos registrados.</p>
+      }
+      @for (entry of log(); track entry.id) {
+        <div class="log-line">
+          <code class="log-method">{{ entry.metodo }}</code>
+          <span class="log-detail">{{ entry.detalle }}</span>
+          <span class="log-ts">{{ entry.ts }}</span>
+        </div>
+      }
+    </div>
+  </div>
+
+</div>

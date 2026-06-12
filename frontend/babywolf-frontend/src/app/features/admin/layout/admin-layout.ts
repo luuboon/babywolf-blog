@@ -23,6 +23,8 @@ export class AdminLayoutComponent {
     { label: 'Usuarios', icon: '👥', routerLink: '/admin/users' },
     { label: 'Posts', icon: '📝', routerLink: '/admin/posts' },
     { label: 'Comentarios', icon: '💬', routerLink: '/admin/comments' },
+    { label: 'Tareas',   icon: '📋', routerLink: '/admin/tareas' },
+    { label: 'DOM Demo', icon: '🧪', routerLink: '/admin/dom-demo' },
   ];
 
   toggleSidebar(): void {

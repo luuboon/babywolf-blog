@@ -37,7 +37,19 @@ export const routes: Routes = [
       {
         path: 'editor/new',
         loadComponent: () => import('./features/admin/posts/editor.component').then(m => m.PostEditorComponent)
-      }
+      },
+      {
+        path: 'tareas',
+        loadComponent: () =>
+          import('./features/admin/tareas/tareas.component')
+            .then(m => m.TareasComponent),
+      },
+      {
+        path: 'dom-demo',
+        loadComponent: () =>
+          import('./features/admin/dom-demo/dom-demo.component')
+            .then(m => m.DomDemoComponent),
+      },
     ]
   },
 
