@@ -37,6 +37,7 @@ func main() {
 	// 5. Setup Gin Router
 	r := gin.Default()
 	r.Use(gin.Logger(), gin.Recovery())
+	r.Use(middleware.CORSMiddleware())
 
 	// Public Routes
 	api := r.Group("/api")
