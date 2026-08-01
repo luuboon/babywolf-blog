@@ -21,6 +21,7 @@ export class AdminLayoutComponent {
   adminMenu: AdminMenuItem[] = [
     { label: 'Dashboard', icon: '📊', routerLink: '/admin' },
     { label: 'Usuarios', icon: '👥', routerLink: '/admin/users' },
+    { label: 'Bitácora', icon: '📜', routerLink: '/admin/audit-log' },
     { label: 'Posts', icon: '📝', routerLink: '/admin/posts' },
     { label: 'Comentarios', icon: '💬', routerLink: '/admin/comments' },
     { label: 'Tareas',   icon: '📋', routerLink: '/admin/tareas' },

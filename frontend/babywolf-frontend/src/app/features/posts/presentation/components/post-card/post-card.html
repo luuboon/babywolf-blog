@@ -1,4 +1,10 @@
-<article class="post-card" [routerLink]="['/posts', post.slug]">
+<article
+    class="post-card"
+    [class.highlighted]="highlighted"
+    [routerLink]="['/posts', post.slug]"
+    (mouseenter)="onPointerEnter()"
+    (mouseleave)="onPointerLeave()"
+>
     @if (post.coverImageUrl) {
       <div class="card-image">
         <img [src]="post.coverImageUrl" [alt]="post.title" loading="lazy" />

@@ -8,6 +8,20 @@
       <a routerLink="/" class="brand-link">
         <h1 class="brand">🐺 BABYWOLF<span class="brand-accent">BLOG</span></h1>
       </a>
+
+      <!-- Practica 7: menu desplegado por evento de puntero -->
+      <div class="categories-menu-wrapper">
+        <button class="header-btn categories-trigger" (click)="toggleCategoriesMenu($event)" aria-haspopup="true" [attr.aria-expanded]="categoriesMenuOpen">
+          Categorías ▾
+        </button>
+        @if (categoriesMenuOpen) {
+          <div class="categories-dropdown">
+            @for (cat of categoriesMenu; track cat.label) {
+              <a [routerLink]="cat.routerLink" class="categories-dropdown-item" (click)="closeCategoriesMenu()">{{ cat.label }}</a>
+            }
+          </div>
+        }
+      </div>
     </div>
 
     <div class="header-center">

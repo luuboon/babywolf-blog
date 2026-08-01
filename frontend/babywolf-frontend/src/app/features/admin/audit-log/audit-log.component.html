@@ -1,0 +1,48 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div>
+      <a routerLink="/admin/users" class="btn-back">← Volver</a>
+    </div>
+    <div>
+      <h1 class="page-title">Bitácora de Accesos</h1>
+      <p class="page-subtitle">Historial de inicios de sesión, cambios de contraseña, altas y cambios de rol</p>
+    </div>
+    <div></div>
+  </div>
+
+  <div *ngIf="loading" class="admin-loading">
+    <div class="spinner"></div>
+    <span>Cargando bitácora...</span>
+  </div>
+
+  <div *ngIf="errorMsg" class="admin-error">⚠️ {{ errorMsg }}</div>
+
+  <div *ngIf="!loading && !errorMsg" class="admin-table-wrapper">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Fecha y hora</th>
+          <th>Usuario</th>
+          <th>Acción</th>
+          <th>IP</th>
+          <th>Detalle</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of entries">
+          <td>{{ entry.created_at | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+          <td>{{ entry.email }}</td>
+          <td>{{ actionLabel(entry.action) }}</td>
+          <td>{{ entry.ip_address || '—' }}</td>
+          <td>{{ entry.details || '—' }}</td>
+        </tr>
+        <tr *ngIf="entries.length === 0">
+          <td colspan="5" class="table-empty">
+            <div class="empty-icon">📜</div>
+            <div>Sin registros todavía.</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

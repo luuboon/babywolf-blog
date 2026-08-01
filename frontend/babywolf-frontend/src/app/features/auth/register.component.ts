@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../core/services/auth.service';
+import { AuthService, STRONG_PASSWORD_PATTERN, STRONG_PASSWORD_HINT } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -16,6 +16,7 @@ export class RegisterComponent {
   errorMsg = '';
   successMsg = '';
   loading = false;
+  passwordHint = STRONG_PASSWORD_HINT;
 
   constructor(
     private fb: FormBuilder,
@@ -24,7 +25,7 @@ export class RegisterComponent {
   ) {
     this.registerForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.pattern(STRONG_PASSWORD_PATTERN)]]
     });
   }
 

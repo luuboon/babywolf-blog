@@ -2,7 +2,7 @@ import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService, STRONG_PASSWORD_PATTERN, STRONG_PASSWORD_HINT } from '../../../core/services/auth.service';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { StorageService } from '../../../core/services/storage.service';
 
@@ -125,6 +125,31 @@ import { StorageService } from '../../../core/services/storage.service';
 
             @if (mfaErrorMessage) {
               <div class="alert error">👾 {{ mfaErrorMessage }}</div>
+            }
+          </div>
+
+          <hr class="divider" />
+
+          <!-- SECCION CAMBIO DE CONTRASEÑA -->
+          <h3 class="section-title">🔑 Cambiar Contraseña</h3>
+          <div class="mfa-section">
+            <div class="field">
+              <label class="field-label">Nueva contraseña</label>
+              <input type="password" [(ngModel)]="newPassword" name="newPassword" class="field-input" placeholder="••••••••" />
+              <small class="field-hint">{{ passwordHint }}</small>
+            </div>
+            <div class="field">
+              <label class="field-label">Confirmar contraseña</label>
+              <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" class="field-input" placeholder="••••••••" />
+            </div>
+            <button class="btn-primary" (click)="changeOwnPassword()" [disabled]="passwordChangeLoading">
+              {{ passwordChangeLoading ? '⏳ Guardando...' : '🔑 Actualizar Contraseña' }}
+            </button>
+            @if (passwordChangeMsg) {
+              <div class="alert success">{{ passwordChangeMsg }}</div>
+            }
+            @if (passwordChangeError) {
+              <div class="alert error">👾 {{ passwordChangeError }}</div>
             }
           </div>
 
@@ -262,6 +287,7 @@ import { StorageService } from '../../../core/services/storage.service';
       font-size: 0.8rem;
       color: #888;
       margin-top: 4px;
+      display: block;
     }
 
     /* ─── Buttons ─── */
@@ -636,6 +662,14 @@ export class ProfilePage implements OnInit {
   showDisableConfirm = false;
   disableCode = '';
 
+  // Cambio de contraseña
+  newPassword = '';
+  confirmPassword = '';
+  passwordChangeLoading = false;
+  passwordChangeMsg = '';
+  passwordChangeError = '';
+  passwordHint = STRONG_PASSWORD_HINT;
+
   async ngOnInit() {
     const userId = await this.authService.getCurrentUserId();
     if (!userId) {
@@ -748,6 +782,36 @@ export class ProfilePage implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  async changeOwnPassword() {
+    this.passwordChangeMsg = '';
+    this.passwordChangeError = '';
+
+    if (!STRONG_PASSWORD_PATTERN.test(this.newPassword)) {
+      this.passwordChangeError = this.passwordHint;
+      this.cdr.detectChanges();
+      return;
+    }
+    if (this.newPassword !== this.confirmPassword) {
+      this.passwordChangeError = 'Las contraseñas no coinciden.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    this.passwordChangeLoading = true;
+    this.cdr.detectChanges();
+
+    const { error } = await this.authService.changePassword(this.newPassword);
+    if (error) {
+      this.passwordChangeError = error.message;
+    } else {
+      this.passwordChangeMsg = '¡Contraseña actualizada correctamente!';
+      this.newPassword = '';
+      this.confirmPassword = '';
+    }
+    this.passwordChangeLoading = false;
+    this.cdr.detectChanges();
   }
 
   async startMfaEnrollment() {

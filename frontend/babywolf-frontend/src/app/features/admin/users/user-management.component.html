@@ -7,7 +7,40 @@
       <h1 class="page-title">Gestión de Usuarios</h1>
       <p class="page-subtitle">Administra los usuarios registrados en el blog</p>
     </div>
-    <div></div>
+    <div>
+      <button class="btn-primary" (click)="showCreateForm = !showCreateForm">
+        {{ showCreateForm ? 'Cancelar' : '+ Nuevo Usuario' }}
+      </button>
+      <a routerLink="/admin/audit-log" class="btn-secondary">📜 Bitácora</a>
+    </div>
+  </div>
+
+  <!-- Alta de usuario -->
+  <div *ngIf="showCreateForm" class="admin-card" style="margin-bottom: 20px;">
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input type="email" [(ngModel)]="newEmail" class="admin-input" placeholder="usuario@correo.com" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Nombre de usuario</label>
+      <input type="text" [(ngModel)]="newUsername" class="admin-input" placeholder="nombre_usuario" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Contraseña</label>
+      <input type="password" [(ngModel)]="newPassword" class="admin-input" placeholder="Contraseña segura" />
+      <small style="color: var(--admin-text-muted); font-size: 0.8rem;">{{ passwordHint }}</small>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Rol</label>
+      <select [(ngModel)]="newRole" class="admin-input">
+        <option value="user">Usuario</option>
+        <option value="admin">Administrador</option>
+      </select>
+    </div>
+    <div *ngIf="createError" class="admin-error">⚠️ {{ createError }}</div>
+    <button class="btn-primary" (click)="createUser()" [disabled]="creating">
+      {{ creating ? 'Creando...' : 'Crear usuario' }}
+    </button>
   </div>
 
   <!-- Loading -->
@@ -27,7 +60,9 @@
       <thead>
         <tr>
           <th>Email</th>
+          <th>Usuario</th>
           <th>Rol</th>
+          <th>Estado</th>
           <th>Fecha Registro</th>
           <th style="text-align: right;">Acciones</th>
         </tr>
@@ -38,24 +73,60 @@
             <span style="font-weight: 600;">{{ user.email }}</span>
           </td>
           <td>
+            <ng-container *ngIf="editingUserId !== user.id; else editUsernameTpl">
+              {{ user.username }}
+            </ng-container>
+            <ng-template #editUsernameTpl>
+              <input type="text" [(ngModel)]="editUsernameValue" class="admin-input" style="width: 140px;" />
+            </ng-template>
+          </td>
+          <td>
             <span class="badge" [ngClass]="user.role === 'admin' ? 'badge-admin' : 'badge-user'">
               {{ user.role === 'admin' ? '🛡️ Admin' : '👤 User' }}
             </span>
           </td>
+          <td>
+            <span class="badge" [ngClass]="user.active ? 'badge-published' : 'badge-draft'">
+              {{ user.active ? '🟢 Activo' : '🔴 Desactivado' }}
+            </span>
+          </td>
           <td style="color: var(--admin-text-muted);">{{ user.created_at | date:'mediumDate' }}</td>
           <td>
-            <div class="table-actions">
+            <div class="table-actions" *ngIf="editingUserId !== user.id">
+              <button class="btn-secondary" (click)="startEditUser(user)">
+                ✏️ Editar
+              </button>
               <button class="btn-secondary" (click)="toggleRole(user)">
                 {{ user.role === 'admin' ? 'Quitar Admin' : 'Hacer Admin' }}
               </button>
-              <button class="btn-danger" (click)="deleteUser(user.id)">
-                🗑 Eliminar
+              <button class="btn-secondary" (click)="startResetPassword(user)">
+                🔑 Reset Password
               </button>
+              <button class="btn-danger" (click)="toggleActive(user)">
+                {{ user.active ? '🚫 Desactivar' : '✅ Activar' }}
+              </button>
+            </div>
+
+            <div *ngIf="editingUserId === user.id" class="form-group" style="margin-top: 10px;">
+              <div *ngIf="editError" class="admin-error">⚠️ {{ editError }}</div>
+              <div class="table-actions" style="margin-top: 6px;">
+                <button class="btn-primary" (click)="confirmEditUser(user)">Guardar</button>
+                <button class="btn-secondary" (click)="cancelEditUser()">Cancelar</button>
+              </div>
+            </div>
+
+            <div *ngIf="resettingUserId === user.id" class="form-group" style="margin-top: 10px;">
+              <input type="password" [(ngModel)]="resetPasswordValue" class="admin-input" placeholder="Nueva contraseña" />
+              <div *ngIf="resetError" class="admin-error">⚠️ {{ resetError }}</div>
+              <div class="table-actions" style="margin-top: 6px;">
+                <button class="btn-primary" (click)="confirmResetPassword(user)">Guardar</button>
+                <button class="btn-secondary" (click)="cancelResetPassword()">Cancelar</button>
+              </div>
             </div>
           </td>
         </tr>
         <tr *ngIf="users.length === 0">
-          <td colspan="4" class="table-empty">
+          <td colspan="6" class="table-empty">
             <div class="empty-icon">👥</div>
             <div>No hay usuarios registrados.</div>
           </td>

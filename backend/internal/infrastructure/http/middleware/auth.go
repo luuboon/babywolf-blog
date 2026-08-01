@@ -26,14 +26,19 @@ func SupabaseAuthMiddleware() gin.HandlerFunc {
 		}
 
 		tokenString := parts[1]
-		jwtSecret := os.Getenv("JWT_SECRET")
 
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-			// Don't forget to validate the alg is what you expect:
-			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			switch token.Method.(type) {
+			case *jwt.SigningMethodHMAC:
+				// Tokens legacy firmados con el JWT Secret compartido (HS256).
+				return []byte(os.Getenv("JWT_SECRET")), nil
+			case *jwt.SigningMethodECDSA:
+				// Tokens nuevos firmados con las JWT Signing Keys asimétricas (ES256).
+				kid, _ := token.Header["kid"].(string)
+				return getECDSAPublicKey(kid)
+			default:
 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 			}
-			return []byte(jwtSecret), nil
 		})
 
 		if err != nil || !token.Valid {

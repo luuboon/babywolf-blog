@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -34,10 +34,35 @@ export class UserLayoutComponent {
     { label: 'Tech', icon: '💻', routerLink: '/category/tech' },
   ];
 
-  constructor(private readonly router: Router) {}
+  // Practica 7: menú desplegable disparado por un evento de puntero (click).
+  categoriesMenuOpen = false;
+  readonly categoriesMenu = [
+    { label: '🎮 Gaming', routerLink: '/category/gaming' },
+    { label: '💻 Tech', routerLink: '/category/tech' },
+    { label: '💭 Opinión', routerLink: '/category/opinion' },
+    { label: '🕹️ Retro', routerLink: '/category/retro' },
+  ];
+
+  constructor(private readonly router: Router, private readonly elementRef: ElementRef<HTMLElement>) {}
 
   toggleSidebar(): void {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
+  }
+
+  toggleCategoriesMenu(event: MouseEvent): void {
+    event.stopPropagation();
+    this.categoriesMenuOpen = !this.categoriesMenuOpen;
+  }
+
+  closeCategoriesMenu(): void {
+    this.categoriesMenuOpen = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (this.categoriesMenuOpen && !this.elementRef.nativeElement.contains(event.target as Node)) {
+      this.categoriesMenuOpen = false;
+    }
   }
 
   onSearch(): void {

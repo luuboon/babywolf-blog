@@ -28,6 +28,12 @@
         transform: translate(2px, 2px);
         box-shadow: 4px 4px #1b1b1b;
     }
+
+    // Practica 9-10: refuerzo visual controlado por JS (mouseenter/mouseleave).
+    &.highlighted {
+        outline: 3px solid #e94560;
+        outline-offset: 2px;
+    }
 }
 
 .card-image {

@@ -57,6 +57,15 @@ func main() {
 		protected.POST("/posts", postController.CreatePost)
 		protected.DELETE("/posts/:id", postController.DeletePost)
         protected.POST("/upload", storageController.UploadFile)
+
+		// Practica 11-12: administracion de usuarios (el rol real se valida
+		// contra la BD dentro de cada handler, no solo con el JWT).
+		protected.GET("/users", userController.ListUsers)
+		protected.POST("/users", userController.CreateUser)
+		protected.PATCH("/users/:id", userController.UpdateUser)
+		protected.PATCH("/users/:id/active", userController.SetActive)
+		protected.PATCH("/users/:id/password", userController.ResetPassword)
+		protected.PATCH("/users/:id/role", userController.UpdateRole)
 	}
 
 	// Start server

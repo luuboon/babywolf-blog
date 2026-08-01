@@ -179,3 +179,15 @@
     }
   }
 }
+
+.field-hint {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  color: #666;
+
+  &.error {
+    color: #d94f4f;
+    font-weight: 700;
+  }
+}
