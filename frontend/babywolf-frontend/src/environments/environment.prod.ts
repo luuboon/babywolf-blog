@@ -6,5 +6,5 @@ export const environment = {
   },
   apiUrl: 'https://uwzynkvnqcupthvrtkry.supabase.co',
   // Backend Go desplegado en Railway (Practica 11-12).
-  backendUrl: 'https://babywolf.up.railway.app/api'
+  backendUrl: 'https://babywolf-blog-production.up.railway.app/api'
 };
