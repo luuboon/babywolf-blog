@@ -9,6 +9,7 @@ type Post struct {
 	Title         string    `json:"title"`
 	Slug          string    `json:"slug"`
 	Content       string    `json:"content"`
+	Category      string    `json:"category"`
 	CoverImageURL string    `json:"cover_image_url,omitempty"`
 	Published     bool      `json:"published"`
 	CreatedAt     time.Time `json:"created_at"`
