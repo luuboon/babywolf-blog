@@ -61,3 +61,25 @@ PSQL="psql -d bw10" pruebas/rls_incidencias.sh
 Resultado obtenido el 29/10/2026: **9 pasan, 0 fallan**. Control negativo:
 con RLS desactivado y `anon` con permisos, fallan 7 de 9 (A lee, modifica y
 borra lo de B; sin sesión se lee todo). Al aplicar de nuevo 006, 9/9.
+
+# Práctica 10 — permisos de `users` y bitácora (008)
+
+`usuarios_permisos.sh` (U-01…U-25) comprueba que nadie se hace admin
+editando su fila, que sin sesión no se leen rol ni bloqueos, que sólo la
+propia cuenta reinicia su contador de intentos y que la bitácora no acepta
+registros de los clientes.
+
+Sobre la base de `app_lectores.sh` (con 001, 006 y 007), igual que en
+Supabase: aplicar 004, las reglas de `users` de `supabase_setup_and_seed.sql`,
+`GRANT ALL ON public.users, public.audit_log TO anon, authenticated`, y el
+trigger de `supabase_auth_trigger.sql` (con `raw_user_meta_data jsonb` en
+`auth.users`). Luego:
+
+```bash
+PSQL="psql -d bwapp" pruebas/usuarios_permisos.sh   # antes de 008: 10/23 (reproduce el hueco)
+psql -d bwapp -f sql/008_permisos_usuarios.sql
+PSQL="psql -d bwapp" pruebas/usuarios_permisos.sh   # con 008
+```
+
+Resultado obtenido el 06/11/2026: **25 pasan, 0 fallan**. `app_lectores.sh`
+sigue 20/20 y `rls_incidencias.sh` 9/9.
