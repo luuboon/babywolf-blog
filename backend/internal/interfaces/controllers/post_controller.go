@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"babywolf-blog-backend/internal/application/usecases"
@@ -16,12 +17,49 @@ func NewPostController(useCase *usecases.ManagePostsUseCase) *PostController {
 	return &PostController{managePostsUseCase: useCase}
 }
 
+// Paginación de GET /api/posts (Práctica 12). Sin parámetros se devuelve la
+// primera página de PostsLimiteDefecto, así el JSON sigue siendo un arreglo y
+// los clientes existentes no cambian; X-Total-Count dice cuántos hay en total.
+const (
+	PostsLimiteDefecto = 50
+	PostsLimiteMax     = 100
+)
+
+// parsePagina valida limit y offset. Devuelve un mensaje si son inválidos.
+func parsePagina(limitStr, offsetStr string) (limit, offset int, errMsg string) {
+	limit, offset = PostsLimiteDefecto, 0
+	if limitStr != "" {
+		n, err := strconv.Atoi(limitStr)
+		if err != nil || n < 1 || n > PostsLimiteMax {
+			return 0, 0, "limit debe ser un entero entre 1 y " + strconv.Itoa(PostsLimiteMax)
+		}
+		limit = n
+	}
+	if offsetStr != "" {
+		n, err := strconv.Atoi(offsetStr)
+		if err != nil || n < 0 {
+			return 0, 0, "offset debe ser un entero mayor o igual a 0"
+		}
+		offset = n
+	}
+	return limit, offset, ""
+}
+
 func (c *PostController) ListPublicPosts(ctx *gin.Context) {
-	posts, err := c.managePostsUseCase.ListPublishedPosts(ctx.Request.Context())
+	limit, offset, msg := parsePagina(ctx.Query("limit"), ctx.Query("offset"))
+	if msg != "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": msg})
+		return
+	}
+	posts, total, err := c.managePostsUseCase.ListPublishedPostsPage(ctx.Request.Context(), limit, offset)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to list posts"})
 		return
 	}
+	if posts == nil {
+		posts = []*entities.Post{} // [] y no null
+	}
+	ctx.Header("X-Total-Count", strconv.FormatInt(total, 10))
 	ctx.JSON(http.StatusOK, posts)
 }
 

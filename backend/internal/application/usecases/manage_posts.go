@@ -32,6 +32,11 @@ func (u *ManagePostsUseCase) ListPublishedPosts(ctx context.Context) ([]*entitie
 	return u.postRepo.ListAll(ctx, false)
 }
 
+// ListPublishedPostsPage: Práctica 12. Página de publicados + total.
+func (u *ManagePostsUseCase) ListPublishedPostsPage(ctx context.Context, limit, offset int) ([]*entities.Post, int64, error) {
+	return u.postRepo.ListPublishedPage(ctx, limit, offset)
+}
+
 func (u *ManagePostsUseCase) DeletePost(ctx context.Context, id string, executorID string, executorRole string) error {
 	post, err := u.postRepo.GetByID(ctx, id)
 	if err != nil {

@@ -56,3 +56,24 @@ func (r *GormPostRepository) ListAll(ctx context.Context, includeUnpublished boo
 	}
 	return posts, nil
 }
+
+// ListPublishedPage: Práctica 12. Una página de publicados con LIMIT/OFFSET
+// (usa idx_posts_publicados_recientes, 009) y el total para X-Total-Count.
+// created_at puede repetirse; id desempata para que las páginas no se solapen.
+func (r *GormPostRepository) ListPublishedPage(ctx context.Context, limit, offset int) ([]*entities.Post, int64, error) {
+	var total int64
+	base := r.db.WithContext(ctx).Model(&entities.Post{}).Where("published = ?", true)
+	if err := base.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+	var posts []*entities.Post
+	err := r.db.WithContext(ctx).
+		Where("published = ?", true).
+		Order("created_at desc").Order("id").
+		Limit(limit).Offset(offset).
+		Find(&posts).Error
+	if err != nil {
+		return nil, 0, err
+	}
+	return posts, total, nil
+}

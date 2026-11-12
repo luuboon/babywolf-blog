@@ -13,4 +13,7 @@ type PostRepository interface {
 	Update(ctx context.Context, post *entities.Post) error
 	Delete(ctx context.Context, id string) error
 	ListAll(ctx context.Context, includeUnpublished bool) ([]*entities.Post, error)
+	// ListPublishedPage devuelve una página de posts publicados (más recientes
+	// primero) y el total de publicados. Práctica 12: evita traer toda la tabla.
+	ListPublishedPage(ctx context.Context, limit, offset int) ([]*entities.Post, int64, error)
 }

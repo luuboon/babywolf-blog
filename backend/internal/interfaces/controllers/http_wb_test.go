@@ -68,6 +68,21 @@ func (r *repoFalso) ListAll(_ context.Context, _ bool) ([]*entities.Post, error)
 	return r.posts, r.err
 }
 
+func (r *repoFalso) ListPublishedPage(_ context.Context, limit, offset int) ([]*entities.Post, int64, error) {
+	if r.err != nil {
+		return nil, 0, r.err
+	}
+	total := int64(len(r.posts))
+	if offset >= len(r.posts) {
+		return nil, total, nil
+	}
+	fin := offset + limit
+	if fin > len(r.posts) {
+		fin = len(r.posts)
+	}
+	return r.posts[offset:fin], total, nil
+}
+
 func hacer(r http.Handler, metodo, ruta, cuerpo string, cabeceras map[string]string) *httptest.ResponseRecorder {
 	req := httptest.NewRequest(metodo, ruta, strings.NewReader(cuerpo))
 	if cuerpo != "" {
