@@ -31,8 +31,16 @@ func (r *GormPostRepository) GetBySlug(ctx context.Context, slug string) (*entit
 	return &post, nil
 }
 
+// Create inserta la noticia. Práctica 12 (defecto P12-D01): si el ID viene
+// vacío se omite la columna para que la base genere el UUID por defecto;
+// antes se enviaba id = '' y PostgreSQL lo rechazaba (SQLSTATE 22P02), de modo
+// que POST /api/admin/posts devolvía 500 en el 100 % de los casos.
 func (r *GormPostRepository) Create(ctx context.Context, post *entities.Post) error {
-	return r.db.WithContext(ctx).Create(post).Error
+	tx := r.db.WithContext(ctx)
+	if post.ID == "" {
+		tx = tx.Omit("id")
+	}
+	return tx.Create(post).Error
 }
 
 func (r *GormPostRepository) Update(ctx context.Context, post *entities.Post) error {
